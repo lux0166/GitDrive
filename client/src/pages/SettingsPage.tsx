@@ -171,12 +171,16 @@ export const SettingsPage: React.FC = () => {
           </div>
 
           <div className={styles.modeOptions}>
-            <button
-              type="button"
+            <div
+              role="button"
+              tabIndex={0}
               className={`${styles.modeOption} ${
                 settings.networkMode === 'airgapped' ? styles.modeOptionActive : ''
               }`}
               onClick={() => handleModeChange('airgapped')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') handleModeChange('airgapped');
+              }}
             >
               <div className={styles.modeRadio}>
                 {settings.networkMode === 'airgapped' && <div className={styles.radioInner} />}
@@ -190,14 +194,18 @@ export const SettingsPage: React.FC = () => {
                   Zero external DNS, zero internet HTTP/HTTPS egress. Runners only resolve internal LAN package mirrors.
                 </p>
               </div>
-            </button>
+            </div>
 
-            <button
-              type="button"
+            <div
+              role="button"
+              tabIndex={0}
               className={`${styles.modeOption} ${
                 settings.networkMode === 'lan-only' ? styles.modeOptionActive : ''
               }`}
               onClick={() => handleModeChange('lan-only')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') handleModeChange('lan-only');
+              }}
             >
               <div className={styles.modeRadio}>
                 {settings.networkMode === 'lan-only' && <div className={styles.radioInner} />}
@@ -211,14 +219,18 @@ export const SettingsPage: React.FC = () => {
                   Primary operations remain strictly within local subnet. Local runners execute isolated processes without sending code or artifacts off-premises.
                 </p>
               </div>
-            </button>
+            </div>
 
-            <button
-              type="button"
+            <div
+              role="button"
+              tabIndex={0}
               className={`${styles.modeOption} ${
                 settings.networkMode === 'controlled' ? styles.modeOptionActive : ''
               }`}
               onClick={() => handleModeChange('controlled')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') handleModeChange('controlled');
+              }}
             >
               <div className={styles.modeRadio}>
                 {settings.networkMode === 'controlled' && <div className={styles.radioInner} />}
@@ -232,7 +244,7 @@ export const SettingsPage: React.FC = () => {
                   Allowlisted package registry mirrors only (e.g. enterprise npm/nuget proxies). Telemetry and source code strictly retained locally.
                 </p>
               </div>
-            </button>
+            </div>
           </div>
         </div>
 

@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 16px;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .headerRow {
@@ -15,6 +16,7 @@
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
+  box-sizing: border-box;
 }
 
 .headerText {
@@ -31,12 +33,14 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
   align-items: start;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .grid {
     grid-template-columns: 1fr;
   }
@@ -50,6 +54,10 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .cardHeader {
@@ -58,18 +66,21 @@
   justify-content: space-between;
   border-bottom: 1px solid var(--color-border-subtle);
   padding-bottom: 10px;
+  min-width: 0;
 }
 
 .cardTitleWrap {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
 }
 
 .cardTitleWrap h2 {
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--color-text-primary);
+  white-space: nowrap;
 }
 
 /* Mode Options */
@@ -77,6 +88,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .modeOption {
@@ -86,10 +99,15 @@
   padding: 12px 14px;
   display: flex;
   align-items: flex-start;
+  justify-content: flex-start;
   gap: 12px;
   text-align: left;
   cursor: pointer;
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  white-space: normal !important;
+  user-select: none;
   transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
@@ -131,6 +149,10 @@
   flex-direction: column;
   gap: 3px;
   flex: 1;
+  min-width: 0;
+  white-space: normal !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .modeNameWrap {
@@ -138,6 +160,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .modeName {
@@ -150,6 +174,9 @@
   font-size: 0.75rem;
   color: var(--color-text-secondary);
   line-height: 1.4;
+  white-space: normal !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Toggle Lists */
@@ -157,6 +184,8 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .toggleItem {
@@ -168,6 +197,8 @@
   background-color: var(--color-surface-hover);
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border-subtle);
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .toggleText {
@@ -175,6 +206,10 @@
   flex-direction: column;
   gap: 2px;
   flex: 1;
+  min-width: 0;
+  white-space: normal !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .toggleTitle {
@@ -187,6 +222,9 @@
   font-size: 0.6875rem;
   color: var(--color-text-secondary);
   line-height: 1.35;
+  white-space: normal !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .checkbox {
@@ -194,6 +232,7 @@
   height: 16px;
   cursor: pointer;
   accent-color: var(--color-primary);
+  flex-shrink: 0;
 }
 
 .fieldRow {
@@ -205,6 +244,8 @@
   background-color: var(--color-surface-hover);
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border-subtle);
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .numberInput {
@@ -218,6 +259,7 @@
   width: 60px;
   text-align: center;
   outline: none;
+  flex-shrink: 0;
 }
 
 /* Secrets List */
@@ -225,6 +267,8 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .secretItem {
@@ -235,12 +279,17 @@
   background-color: var(--color-surface-hover);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-xs);
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .secretCode {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .addSecretForm {
@@ -248,10 +297,13 @@
   align-items: center;
   gap: 8px;
   padding-top: 4px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .textInput {
   flex: 1;
+  min-width: 0;
   background-color: var(--color-surface-hover);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
@@ -259,6 +311,7 @@
   color: var(--color-text-primary);
   font-size: 0.75rem;
   outline: none;
+  box-sizing: border-box;
 }
 
 .textInput:focus {
@@ -273,6 +326,7 @@
   color: var(--color-text-primary);
   font-size: 0.75rem;
   outline: none;
+  box-sizing: border-box;
 }
 
 /* Runner Fleet List */
@@ -280,6 +334,8 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .runnerRow {
@@ -290,18 +346,24 @@
   background-color: var(--color-surface-hover);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-sm);
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .runnerInfo {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
 }
 
 .runnerName {
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .runnerMeta {
@@ -316,6 +378,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .addRunnerBox {
@@ -326,6 +389,8 @@
   background-color: var(--color-surface-hover);
   border: 1px dashed var(--color-border);
   border-radius: var(--radius-sm);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .formRow {
@@ -333,16 +398,20 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .formLabel {
   font-size: 0.75rem;
   color: var(--color-text-secondary);
+  white-space: nowrap;
 }
 
 .gpgKeyRow {
   border-top: 1px solid var(--color-border-subtle);
   padding-top: 10px;
+  min-width: 0;
 }
 
 .gpgInfo {
@@ -351,6 +420,7 @@
   gap: 6px;
   font-size: 0.75rem;
   color: var(--color-text-secondary);
+  min-width: 0;
 }
 
 .gpgCode {
@@ -360,6 +430,9 @@
   border-radius: var(--radius-xs);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border-subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .loadingContainer {
