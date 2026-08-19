@@ -22,8 +22,11 @@ export class RunnerService extends EventEmitter {
 
   constructor() {
     super();
-    this.reposBasePath = path.resolve(process.cwd(), 'data', 'repos');
-    this.artifactsBasePath = path.resolve(process.cwd(), 'data', 'artifacts');
+    const dataDir = fs.existsSync(path.resolve(process.cwd(), 'server', 'data'))
+      ? path.resolve(process.cwd(), 'server', 'data')
+      : path.resolve(process.cwd(), 'data');
+    this.reposBasePath = path.join(dataDir, 'repos');
+    this.artifactsBasePath = path.join(dataDir, 'artifacts');
     this.ensureDirectoryExists(this.artifactsBasePath);
     this.seedDefaultRuns();
   }

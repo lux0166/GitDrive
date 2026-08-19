@@ -3,7 +3,9 @@ import path from 'path';
 import crypto from 'crypto';
 import { Repository, Commit, FileNode, FileBlob, DiffFile } from '../types/gitdrive.types.js';
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
+const DATA_DIR = fs.existsSync(path.resolve(process.cwd(), 'server', 'data'))
+  ? path.resolve(process.cwd(), 'server', 'data')
+  : path.resolve(process.cwd(), 'data');
 const REPOS_DIR = path.join(DATA_DIR, 'repos');
 
 export class GitService {
@@ -32,7 +34,8 @@ export class GitService {
         const metaPath = path.join(repoPath, '.gitdrive.json');
         if (fs.existsSync(metaPath)) {
           try {
-            const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+            const meta: Repository = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+            meta.path = repoPath;
             repos.push(meta);
           } catch {
             // fallback
