@@ -28,27 +28,15 @@
 - Isolated process execution sandbox with ANSI terminal rendering, line search filtering, and auto-scroll locking.
 - Generates verified release bundles with cryptographic SHA-256 checksums and duration telemetry.
 
-### 4. 📦 LAN Application Store & 2-Tier Distribution Cards
+### 4. 📦 LAN Application Store & Distribution Cards
 - Private enterprise catalog distributing compiled binaries (`.exe`, `.msi`, `.tar.gz`, `.zip`, Daemons) to local LAN machines.
-- **DealSpace 2-Tier Cards**: Upper surface showcases package identity and platform pills; bottom panel provides cryptographic SHA-256 verification, file size metadata, and **1-Click Install**.
+- **Unified Distribution Cards**: Upper surface showcases package identity and platform pills; bottom panel provides cryptographic SHA-256 verification, file size metadata, and **1-Click Install**.
 - Filter ribbon with automated package counters per operating system.
 
 ### 5. 🛡️ Air-Gap Security & Runner Fleet Management
 - **Zero-Egress Boundary**: Strict local LAN boundary with optional external proxy blocking.
 - Real-time secret masking (`ghp_***`, `AKIA***`, private keys) across all build and runner log outputs.
 - Live daemon monitoring for local worker pools.
-
----
-
-## 📐 Design Engineering & Craft Standards
-
-GitDrive is built following strict **DealSpace UI Standards** and **Rico Design Engineering Principles**:
-
-- **DealSpace 2-Tier Card Architecture**: Cards feature a distinct upper identity area paired with a full-width bottom strip (`#F8F7F4` in light mode, `#141416` in dark mode) for metadata and CTAs.
-- **Unified 3-Column Grid**: Geometric pixel-level alignment across overview metrics, active repositories, and runner fleet status.
-- **Header Height Synchronization**: 52px fixed header height across both sidebar branding and top navigation to eliminate vertical layout jitter.
-- **380ms Corner Sweep Theme Switcher**: Radial clip-path theme transitions with built-in `prefers-reduced-motion` accessibility checks.
-- **Typography Calibration**: Exclusively **Regular (400)** and **Medium (500)** font weights (Inter / Sequel Sans) with `0px` letter-spacing, eliminating arbitrary heavy bolding.
 
 ---
 
