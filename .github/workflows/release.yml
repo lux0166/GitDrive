@@ -34,6 +34,8 @@ jobs:
 
       - name: Compile Native Desktop App & Installers
         run: npm run electron:build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Windows Desktop Artifacts
         uses: actions/upload-artifact@v4
