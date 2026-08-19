@@ -3,7 +3,9 @@ import path from 'path';
 import crypto from 'crypto';
 import { Repository, Commit, FileNode, FileBlob, DiffFile } from '../types/gitdrive.types.js';
 
-const DATA_DIR = fs.existsSync(path.resolve(process.cwd(), 'server', 'data'))
+const DATA_DIR = process.env.GITDRIVE_DATA_DIR
+  ? path.resolve(process.env.GITDRIVE_DATA_DIR)
+  : fs.existsSync(path.resolve(process.cwd(), 'server', 'data'))
   ? path.resolve(process.cwd(), 'server', 'data')
   : path.resolve(process.cwd(), 'data');
 const REPOS_DIR = path.join(DATA_DIR, 'repos');
