@@ -21,10 +21,39 @@ interface ShellProps {
 
 export const Shell: React.FC<ShellProps> = ({ currentTab, onTabChange, children }) => {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [profile, setProfile] = useState<{ displayName: string; role: string; initials: string; hostname: string }>({
+    displayName: 'Operator',
+    role: 'LAN Admin',
+    initials: 'OP',
+    hostname: 'gitdrive.local',
+  });
+
+  const [isProfileLoading, setIsProfileLoading] = useState(true);
+  const [lanStatus, setLanStatus] = useState<'Online' | 'Offline' | 'Connecting...'>('Connecting...');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    fetch('/api/user/profile')
+      .then((res) => {
+        if (!res.ok) throw new Error('Network error');
+        return res.json();
+      })
+      .then((data) => {
+        if (data && data.displayName) {
+          setProfile(data);
+          setLanStatus('Online');
+        }
+      })
+      .catch(() => {
+        setLanStatus('Offline');
+      })
+      .finally(() => {
+        setIsProfileLoading(false);
+      });
+  }, []);
 
   const toggleTheme = (e: React.MouseEvent) => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
@@ -121,11 +150,22 @@ export const Shell: React.FC<ShellProps> = ({ currentTab, onTabChange, children 
           <div className={styles.lanStatusCard}>
             <div className={styles.lanStatusHeader}>
               <span className={styles.lanStatusTitle}>Private LAN</span>
-              <span className="status-pill neutral">Online</span>
+              <span
+                className={`status-pill ${
+                  lanStatus === 'Online'
+                    ? 'success'
+                    : lanStatus === 'Offline'
+                    ? 'danger'
+                    : 'neutral'
+                }`}
+                aria-live="polite"
+              >
+                {lanStatus}
+              </span>
             </div>
             <div className={styles.lanNodeInfo}>
               <Server size={12} aria-hidden="true" />
-              <span>gitdrive.local</span>
+              <span>{profile.hostname}</span>
             </div>
           </div>
         </div>
@@ -168,17 +208,23 @@ export const Shell: React.FC<ShellProps> = ({ currentTab, onTabChange, children 
               {theme === 'dark' ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
             </button>
 
-            {/* User Profile */}
+            {/* Dynamic User Profile */}
             <button
               type="button"
               className={styles.userProfile}
-              aria-label="User Profile: Tran Huy (LAN Admin)"
+              aria-label={
+                isProfileLoading
+                  ? 'Loading user profile...'
+                  : `User Profile: ${profile.displayName} (${profile.role})`
+              }
               onClick={() => onTabChange('settings')}
             >
-              <div className={styles.avatar}>TH</div>
+              <div className={styles.avatar}>{isProfileLoading ? '…' : profile.initials}</div>
               <div className={styles.userInfo}>
-                <span className={styles.userName}>Tran Huy</span>
-                <span className={styles.userRole}>LAN Admin</span>
+                <span className={styles.userName}>
+                  {isProfileLoading ? 'Loading…' : profile.displayName}
+                </span>
+                <span className={styles.userRole}>{profile.role}</span>
               </div>
             </button>
           </div>

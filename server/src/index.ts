@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import { exec } from 'child_process';
 import { GitService } from './services/git.service.js';
 import { IntelligenceService } from './services/intelligence.service.js';
@@ -21,6 +22,61 @@ const gitService = new GitService();
 const intelligenceService = new IntelligenceService();
 const runnerService = new RunnerService();
 const releaseService = new ReleaseService();
+
+// Dynamic Operator Profile state
+const userProfile = {
+  displayName: '',
+  role: 'LAN Admin',
+};
+
+const computeInitials = (name: string): string => {
+  if (!name) return 'OP';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+};
+
+const getOsUsername = (): string => {
+  try {
+    return os.userInfo().username || process.env.USERNAME || process.env.USER || 'Operator';
+  } catch {
+    return process.env.USERNAME || process.env.USER || 'Operator';
+  }
+};
+
+// 0. Dynamic User Profile
+app.get('/api/user/profile', (req: Request, res: Response) => {
+  const osUser = getOsUsername();
+  const displayName = userProfile.displayName || osUser;
+  res.json({
+    username: osUser,
+    displayName,
+    role: userProfile.role || 'LAN Admin',
+    hostname: os.hostname() || 'gitdrive.local',
+    initials: computeInitials(displayName),
+  });
+});
+
+app.post('/api/user/profile', (req: Request, res: Response) => {
+  try {
+    const { displayName, role } = req.body;
+    if (displayName !== undefined) userProfile.displayName = String(displayName).trim();
+    if (role !== undefined) userProfile.role = String(role).trim();
+    const osUser = getOsUsername();
+    const finalName = userProfile.displayName || osUser;
+    res.json({
+      username: osUser,
+      displayName: finalName,
+      role: userProfile.role || 'LAN Admin',
+      hostname: os.hostname() || 'gitdrive.local',
+      initials: computeInitials(finalName),
+    });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
 
 // Auto-register release into LAN App Catalog when a pipeline run succeeds and produces artifacts
 runnerService.on('run_updated', (run) => {

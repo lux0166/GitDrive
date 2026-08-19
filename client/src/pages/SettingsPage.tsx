@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   KeyRound,
   RotateCw,
+  User,
 } from 'lucide-react';
 import { GitDriveSettings, RunnerNode, NetworkMode } from '../types/client.types.js';
 import styles from './SettingsPage.module.css';
@@ -25,9 +26,51 @@ export const SettingsPage: React.FC = () => {
   const [newRunnerConcurrency, setNewRunnerConcurrency] = useState(2);
   const [showAddRunner, setShowAddRunner] = useState(false);
 
+  // Operator Profile state
+  const [profile, setProfile] = useState<{ displayName: string; role: string; username: string; hostname: string; initials: string }>({
+    displayName: '',
+    role: 'LAN Admin',
+    username: '',
+    hostname: '',
+    initials: '',
+  });
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [profileSuccess, setProfileSuccess] = useState(false);
+
   useEffect(() => {
     fetchSettings();
+    fetchProfile();
   }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch('/api/user/profile');
+      const data = await res.json();
+      setProfile(data);
+    } catch (err) {
+      console.error('Failed to fetch profile', err);
+    }
+  };
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setIsSavingProfile(true);
+      const res = await fetch('/api/user/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ displayName: profile.displayName, role: profile.role }),
+      });
+      const data = await res.json();
+      setProfile(data);
+      setProfileSuccess(true);
+      setTimeout(() => setProfileSuccess(false), 2000);
+    } catch (err) {
+      console.error('Failed to update profile', err);
+    } finally {
+      setIsSavingProfile(false);
+    }
+  };
 
   const fetchSettings = async () => {
     try {
@@ -160,6 +203,51 @@ export const SettingsPage: React.FC = () => {
       </div>
 
       <div className={styles.grid}>
+        {/* Card 0: Operator Identity & Profile */}
+        <div className={styles.card} style={{ gridColumn: '1 / -1' }}>
+          <div className={styles.cardHeader}>
+            <div className={styles.cardTitleWrap}>
+              <User size={16} />
+              <h2>Operator Profile & Node Identity</h2>
+            </div>
+            <span className="status-pill neutral">Local Node: {profile.hostname}</span>
+          </div>
+
+          <form onSubmit={handleSaveProfile} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: '14px', alignItems: 'flex-end', marginTop: '12px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', color: '#a1a1aa', marginBottom: '6px' }}>Operator Display Name (OS Username: {profile.username})</label>
+              <input
+                type="text"
+                placeholder={profile.username || 'e.g. Developer'}
+                value={profile.displayName}
+                onChange={(e) => setProfile({ ...profile, displayName: e.target.value })}
+                className={styles.textInput}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', color: '#a1a1aa', marginBottom: '6px' }}>LAN Role & Privilege</label>
+              <select
+                value={profile.role}
+                onChange={(e) => setProfile({ ...profile, role: e.target.value })}
+                className={styles.selectInput}
+              >
+                <option value="LAN Admin">LAN Admin</option>
+                <option value="DevOps Lead">DevOps Lead</option>
+                <option value="Security Officer">Security Officer</option>
+                <option value="Software Engineer">Software Engineer</option>
+              </select>
+            </div>
+
+            <div>
+              <button type="submit" className="btn-secondary" disabled={isSavingProfile}>
+                {profileSuccess ? <Check size={14} /> : <Save size={14} />}
+                <span>{profileSuccess ? 'Updated' : 'Update Profile'}</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
         {/* Card 1: LAN Operating Mode */}
         <div className={styles.card}>
           <div className={styles.cardHeader}>
