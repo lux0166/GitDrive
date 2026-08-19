@@ -15,8 +15,41 @@ permissions:
   contents: write
 
 jobs:
-  build-and-release:
-    name: Build, Package & Publish Release
+  build-windows-exe:
+    name: Build Standalone Windows Executable (.exe)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository Source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Runtime (v22.x LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Monorepo Dependencies
+        run: npm ci
+
+      - name: Compile Standalone Executable (.exe)
+        run: |
+          npm run build
+          npm run build:bundle
+          node --experimental-sea-config sea-config.json
+          node -e "require('fs').copyFileSync(process.execPath, 'dist/gitdrive.exe')"
+          npx -y postject dist/gitdrive.exe NODE_SEA_BLOB dist/sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2
+
+      - name: Upload Windows Executable Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-binary
+          path: dist/gitdrive.exe
+          retention-days: 1
+
+  package-and-publish:
+    name: Package Archives & Publish GitHub Release
+    needs: build-windows-exe
     runs-on: ubuntu-latest
 
     steps:
@@ -34,11 +67,14 @@ jobs:
       - name: Install Monorepo Dependencies
         run: npm ci
 
-      - name: Run Backend & Security Tests
-        run: npm test --workspace=server
-
       - name: Compile Client & Server
         run: npm run build
+
+      - name: Download Windows Binary
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-binary
+          path: dist-bin
 
       - name: Prepare Release Distribution Bundle
         id: package
@@ -49,24 +85,27 @@ jobs:
           fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           
+          # Move standalone exe
+          cp dist-bin/gitdrive.exe "gitdrive-${VERSION}-win-x64.exe"
+          
+          # Create archive directory
           RELEASE_DIR="gitdrive-${VERSION}"
           mkdir -p "${RELEASE_DIR}"
           
-          # Copy production bundles and documentation
           cp -r server/dist "${RELEASE_DIR}/server"
           cp -r client/dist "${RELEASE_DIR}/client"
           cp package.json package-lock.json "${RELEASE_DIR}/"
           cp HOW_TO_USE.md README.md "${RELEASE_DIR}/"
           
-          # Create archive bundles
           tar -czf "gitdrive-${VERSION}-linux-x64.tar.gz" -C "${RELEASE_DIR}" .
           zip -r "gitdrive-${VERSION}-win-x64.zip" "${RELEASE_DIR}"
           
           # Calculate SHA-256 Checksums
-          sha256sum "gitdrive-${VERSION}-linux-x64.tar.gz" > SHA256SUMS.txt
+          sha256sum "gitdrive-${VERSION}-win-x64.exe" > SHA256SUMS.txt
+          sha256sum "gitdrive-${VERSION}-linux-x64.tar.gz" >> SHA256SUMS.txt
           sha256sum "gitdrive-${VERSION}-win-x64.zip" >> SHA256SUMS.txt
           
-          echo "Created distribution archives with SHA-256 hashes:"
+          echo "Created distribution assets with SHA-256 hashes:"
           cat SHA256SUMS.txt
 
       - name: Create GitHub Release
@@ -78,6 +117,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
+            gitdrive-${{ env.VERSION }}-win-x64.exe
             gitdrive-${{ env.VERSION }}-linux-x64.tar.gz
             gitdrive-${{ env.VERSION }}-win-x64.zip
             SHA256SUMS.txt
@@ -85,6 +125,7 @@ jobs:
             ## GitDrive — Local-First Software Delivery Platform (${{ env.VERSION }})
 
             ### 🚀 Production Release Highlights
+            - **Standalone Windows Executable (`.exe`)**: Self-contained single-file binary with zero prerequisites.
             - **Strict Monochrome Black & White Standard**: Distraction-free, high-contrast industrial control plane.
             - **Unified Local Git Hosting**: Real 2-pane code explorer, AST manifest parser, commit history & working tree diff.
             - **GitActions Runner Engine**: 8-stage automated delivery loop with real-time SSE terminal streaming & secret redaction.

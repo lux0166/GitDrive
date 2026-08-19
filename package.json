@@ -8,6 +8,8 @@
     "dev:server": "npm run dev --workspace=server",
     "dev:client": "npm run dev --workspace=client",
     "build": "npm run build --workspace=server && npm run build --workspace=client",
+    "build:bundle": "npx -y esbuild server/dist/index.js --bundle --platform=node --target=node20 --outfile=dist/server-bundle.cjs",
+    "build:exe": "npm run build && npm run build:bundle && node --experimental-sea-config sea-config.json && node -e \"require('fs').copyFileSync(process.execPath, 'dist/gitdrive.exe')\" && npx -y postject dist/gitdrive.exe NODE_SEA_BLOB dist/sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2",
     "test": "npm run test --workspace=server"
   },
   "workspaces": [

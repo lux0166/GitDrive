@@ -337,6 +337,24 @@ app.delete('/api/settings/runners/:id', (req: Request, res: Response) => {
   }
 });
 
+// 7. Static Web UI Serving for Production & Standalone Executable
+const clientDistCandidates = [
+  path.resolve(process.cwd(), 'client', 'dist'),
+  path.resolve(process.cwd(), 'dist', 'client'),
+  path.resolve(process.cwd(), 'dist'),
+];
+for (const cand of clientDistCandidates) {
+  if (fs.existsSync(cand) && fs.existsSync(path.join(cand, 'index.html'))) {
+    app.use(express.static(cand));
+    app.get('*', (req: Request, res: Response) => {
+      if (!req.path.startsWith('/api')) {
+        res.sendFile(path.join(cand, 'index.html'));
+      }
+    });
+    break;
+  }
+}
+
 app.listen(PORT, () => {
   console.log(`\n=================================================`);
   console.log(`  GitDrive Local-First Control Plane v0.1.0`);
