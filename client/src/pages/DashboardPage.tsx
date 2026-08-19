@@ -23,6 +23,7 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
   const [repos, setRepos] = useState<Repository[]>([]);
   const [runs, setRuns] = useState<PipelineRun[]>([]);
   const [releases, setReleases] = useState<Release[]>([]);
+  const [runners, setRunners] = useState<any[]>([]);
 
   useEffect(() => {
     fetchDashboardData();
@@ -30,19 +31,22 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
 
   const fetchDashboardData = async () => {
     try {
-      const [reposRes, runsRes, relsRes] = await Promise.all([
+      const [reposRes, runsRes, relsRes, settingsRes] = await Promise.all([
         fetch('/api/repos'),
         fetch('/api/runs'),
         fetch('/api/catalog'),
+        fetch('/api/settings'),
       ]);
-      const [reposData, runsData, relsData] = await Promise.all([
+      const [reposData, runsData, relsData, settingsData] = await Promise.all([
         reposRes.json(),
         runsRes.json(),
         relsRes.json(),
+        settingsRes.json(),
       ]);
       setRepos(reposData);
       setRuns(runsData);
       setReleases(relsData);
+      setRunners(settingsData.runners || []);
     } catch (err) {
       console.error('Failed to load dashboard data', err);
     }
@@ -219,16 +223,13 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
             </div>
 
             <div className={styles.fleetList}>
-              <div className={styles.fleetItem}>
-                <Server size={13} />
-                <span>runner-lan-01 (Daemon)</span>
-                <span className="status-pill neutral">Ready</span>
-              </div>
-              <div className={styles.fleetItem}>
-                <Terminal size={13} />
-                <span>runner-sandbox-02</span>
-                <span className="status-pill neutral">Ready</span>
-              </div>
+              {runners.map((r) => (
+                <div key={r.id} className={styles.fleetItem}>
+                  {r.type === 'process-jail' ? <Terminal size={13} /> : <Server size={13} />}
+                  <span>{r.name}</span>
+                  <span className="status-pill neutral">{r.status}</span>
+                </div>
+              ))}
             </div>
           </div>
 

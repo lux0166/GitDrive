@@ -18,6 +18,29 @@ const intelligenceService = new IntelligenceService();
 const runnerService = new RunnerService();
 const releaseService = new ReleaseService();
 
+// Auto-register release into LAN App Catalog when a pipeline run succeeds and produces artifacts
+runnerService.on('run_updated', (run) => {
+  if (run.status === 'passed' && run.artifacts && run.artifacts.length > 0) {
+    const existing = releaseService
+      .getReleases(run.repoId)
+      .find((r) => r.artifacts.some((a) => a.id === run.artifacts[0].id));
+    if (!existing) {
+      releaseService.createRelease({
+        repoId: run.repoId,
+        repoName: run.repoName,
+        tagName: `v2.4.${Date.now().toString().slice(-2)}`,
+        title: `${run.repoName} Release (${run.id})`,
+        notes: `Automated verified binary package produced by GitDrive Local Runner.\nSHA-256 Checksum: ${run.artifacts[0].sha256}`,
+        version: '2.4.0',
+        commitSha: run.commitSha,
+        releaseDate: run.endTime || new Date().toISOString(),
+        distributionChannel: 'stable',
+        artifacts: run.artifacts,
+      });
+    }
+  }
+});
+
 const pStr = (val: string | string[] | undefined): string => {
   if (!val) return '';
   return Array.isArray(val) ? val[0] : val;

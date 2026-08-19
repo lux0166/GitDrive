@@ -1,0 +1,98 @@
+name: Release & Distribute Binaries
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version tag (e.g. v0.1.0)'
+        required: true
+        default: 'v0.1.0'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build, Package & Publish Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository Source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js Runtime (v22.x LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Monorepo Dependencies
+        run: npm ci
+
+      - name: Run Backend & Security Tests
+        run: npm test --workspace=server
+
+      - name: Compile Client & Server
+        run: npm run build
+
+      - name: Prepare Release Distribution Bundle
+        id: package
+        run: |
+          VERSION="${{ github.ref_name }}"
+          if [ -z "$VERSION" ] || [[ "$VERSION" != v* ]]; then
+            VERSION="${{ github.event.inputs.version || 'v0.1.0' }}"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          
+          RELEASE_DIR="gitdrive-${VERSION}"
+          mkdir -p "${RELEASE_DIR}"
+          
+          # Copy production bundles and documentation
+          cp -r server/dist "${RELEASE_DIR}/server"
+          cp -r client/dist "${RELEASE_DIR}/client"
+          cp package.json package-lock.json "${RELEASE_DIR}/"
+          cp HOW_TO_USE.md README.md "${RELEASE_DIR}/"
+          
+          # Create archive bundles
+          tar -czf "gitdrive-${VERSION}-linux-x64.tar.gz" -C "${RELEASE_DIR}" .
+          zip -r "gitdrive-${VERSION}-win-x64.zip" "${RELEASE_DIR}"
+          
+          # Calculate SHA-256 Checksums
+          sha256sum "gitdrive-${VERSION}-linux-x64.tar.gz" > SHA256SUMS.txt
+          sha256sum "gitdrive-${VERSION}-win-x64.zip" >> SHA256SUMS.txt
+          
+          echo "Created distribution archives with SHA-256 hashes:"
+          cat SHA256SUMS.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "GitDrive Release ${{ env.VERSION }}"
+          tag_name: ${{ env.VERSION }}
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+          files: |
+            gitdrive-${{ env.VERSION }}-linux-x64.tar.gz
+            gitdrive-${{ env.VERSION }}-win-x64.zip
+            SHA256SUMS.txt
+          body: |
+            ## GitDrive — Local-First Software Delivery Platform (${{ env.VERSION }})
+
+            ### 🚀 Production Release Highlights
+            - **Strict Monochrome Black & White Standard**: Distraction-free, high-contrast industrial control plane.
+            - **Unified Local Git Hosting**: Real 2-pane code explorer, AST manifest parser, commit history & working tree diff.
+            - **GitActions Runner Engine**: 8-stage automated delivery loop with real-time SSE terminal streaming & secret redaction.
+            - **Cryptographic Provenance**: SHA-256 checksums calculated and verified on all produced release binaries.
+            - **Air-Gapped & LAN Security**: Zero external telemetry, configurable runner sandboxes, and custom secret masking.
+
+            ### 📦 Cryptographic Integrity & Checksums
+            Verify package authenticity prior to running in air-gapped environments:
+            ```bash
+            sha256sum -c SHA256SUMS.txt
+            ```

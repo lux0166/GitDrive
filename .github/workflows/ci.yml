@@ -1,0 +1,38 @@
+name: CI Quality Gate & Test Suite
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Lint, Test & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository Source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Runtime (v22.x LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Monorepo Dependencies
+        run: npm ci
+
+      - name: Execute Server Unit Tests & Security Suite
+        run: npm test --workspace=server
+
+      - name: Build Server and Client Workspaces
+        run: npm run build
+
+      - name: Verify Distribution Artifact Integrity
+        run: |
+          test -d client/dist
+          test -d server/dist
+          echo "Production bundles compiled successfully with 0 errors."

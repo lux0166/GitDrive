@@ -130,36 +130,18 @@ GitDrive/
 │   │   ├── types/               # GitDrive domain models
 │   │   └── index.ts             # API routes & SSE endpoints
 │   └── tsconfig.json
-├── Documents/                   # 18 Comprehensive Product & Architecture Specs
-│   ├── 01-product-vision.md
-│   ├── 05-functional-requirements.md
-│   ├── 06-workflow-intelligence.md
-│   ├── 08-git-actions-cicd.md
-│   ├── 11-system-architecture.md
-│   └── ...
-├── .agent-history/              # Technical changelogs and audit provenance
+├── .github/                     # GitHub Actions CI/CD & Automated Release Workflows
+│   └── workflows/
+│       ├── ci.yml               # Automated test & build quality gate
+│       └── release.yml          # Automated binary packaging, SHA-256 checksums & releases
+├── HOW_TO_USE.md                # Comprehensive User & Operator Guide
 ├── .gitignore                   # Secret scanning & build exclusions
 └── package.json                 # Monorepo workspace configuration
 ```
 
 ---
 
-## 📚 Detailed Specifications Index
-
-For deep-dive architectural specifications, refer to the [Documents/](Documents/) directory:
-
-| Document | Description |
-| :--- | :--- |
-| [01. Product Vision](Documents/01-product-vision.md) | Core vision, problem statement, and local-first value proposition |
-| [04. Product Scope](Documents/04-product-scope.md) | In-scope vs out-of-scope boundaries |
-| [06. Workflow Intelligence](Documents/06-workflow-intelligence.md) | AST manifest inspection rules and DAG generation logic |
-| [08. GitActions CI/CD](Documents/08-git-actions-cicd.md) | Process isolation, SSE streaming, and runner orchestration |
-| [09. Build & Release](Documents/09-build-release-distribution.md) | SHA-256 provenance tracking and LAN package distribution |
-| [10. Local LAN Security](Documents/10-local-lan-security.md) | Air-gap protection, secret masking, and permission boundaries |
-| [11. System Architecture](Documents/11-system-architecture.md) | High-level component topology and API contracts |
-
----
-
 ## 📄 License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
+
