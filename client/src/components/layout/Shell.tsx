@@ -39,7 +39,6 @@ export const Shell: React.FC<ShellProps> = ({ currentTab, onTabChange, children 
 
     const x = e.clientX;
     const y = e.clientY;
-    // max distance to all 4 corners + 150px safety buffer
     const endRadius =
       Math.hypot(
         Math.max(x, window.innerWidth - x),
@@ -93,7 +92,6 @@ export const Shell: React.FC<ShellProps> = ({ currentTab, onTabChange, children 
           </div>
           <div className={styles.brandText}>
             <span className={styles.brandName}>GitDrive</span>
-            <span className={styles.brandTag}>Local-First Delivery</span>
           </div>
         </button>
 
@@ -127,7 +125,6 @@ export const Shell: React.FC<ShellProps> = ({ currentTab, onTabChange, children 
                 <span aria-hidden="true">●</span> Online
               </span>
             </div>
-            <p className={styles.lanStatusDesc}>Air-gapped boundary active. Zero telemetry egress.</p>
             <div className={styles.lanNodeInfo}>
               <Server size={12} aria-hidden="true" />
               <span>gitdrive.local</span>
@@ -147,10 +144,6 @@ export const Shell: React.FC<ShellProps> = ({ currentTab, onTabChange, children 
               <span className={styles.breadcrumbActive}>
                 {navItems.find((n) => n.id === currentTab)?.label || currentTab}
               </span>
-            </div>
-            <div className="status-pill success">
-              <ShieldCheck size={12} aria-hidden="true" />
-              <span>Isolated LAN Runner Active</span>
             </div>
           </div>
 

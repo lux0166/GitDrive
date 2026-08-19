@@ -7,16 +7,10 @@
 
 .headerRow {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-}
-
-.headerText {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
 }
 
 .title {
@@ -25,18 +19,13 @@
   color: var(--color-text-primary);
 }
 
-.subtitle {
-  font-size: 0.8125rem;
-  color: var(--color-text-secondary);
-}
-
 .headerActions {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-/* DealSpace Unified 3-Column 2-Tier Metric Cards Grid */
+/* Single-Tier Clean Metric Cards Grid */
 .metricsGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -50,25 +39,19 @@
   }
 }
 
-.twoTierCard {
+.metricCard {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.cardTopHalf {
-  padding: 16px 16px 14px 16px;
+  padding: 16px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .metricIconBox {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border-radius: var(--radius-sm);
   background-color: var(--color-surface-hover);
   border: 1px solid var(--color-border);
@@ -80,8 +63,8 @@
 }
 
 .metricIconBoxSuccess {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border-radius: var(--radius-sm);
   background-color: var(--color-success-bg);
   border: 1px solid var(--color-border);
@@ -93,8 +76,8 @@
 }
 
 .metricIconBoxAccent {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border-radius: var(--radius-sm);
   background-color: var(--color-info-bg);
   border: 1px solid var(--color-border);
@@ -108,7 +91,7 @@
 .metricInfo {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
 }
 
 .metricLabel {
@@ -117,24 +100,10 @@
 }
 
 .metricValue {
-  font-size: 1.25rem;
+  font-size: 1.375rem;
   font-weight: 500;
   color: var(--color-text-primary);
   line-height: 1.15;
-}
-
-.cardBottomPanel {
-  background-color: var(--color-panel-bottom);
-  border-top: 1px solid var(--color-border-subtle);
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.6875rem;
-}
-
-.bottomLabel {
-  color: var(--color-text-muted);
 }
 
 /* Main Grid Layout */
@@ -229,14 +198,6 @@
   color: var(--color-text-primary);
 }
 
-.repoDescription {
-  font-size: 0.75rem;
-  color: var(--color-text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .repoActions {
   flex-shrink: 0;
 }
@@ -299,50 +260,10 @@
   color: var(--color-text-secondary);
 }
 
-.securityBox {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.boundaryInfo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  background-color: var(--color-panel-bottom);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border-subtle);
-}
-
-.boundaryDot {
-  width: 6px;
-  height: 6px;
-  border-radius: var(--radius-full);
-  background-color: #22C55E;
-  flex-shrink: 0;
-}
-
-.boundaryText {
-  display: flex;
-  flex-direction: column;
-}
-
-.boundaryTitle {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--color-text-primary);
-}
-
-.boundarySub {
-  font-size: 0.6875rem;
-  color: var(--color-text-muted);
-}
-
 .fleetList {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .fleetItem {
@@ -350,10 +271,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 6px 8px;
+  padding: 8px 10px;
   background-color: var(--color-surface-hover);
   border-radius: var(--radius-sm);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-family: var(--font-mono);
   color: var(--color-text-secondary);
 }

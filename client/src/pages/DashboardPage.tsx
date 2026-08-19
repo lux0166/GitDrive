@@ -50,14 +50,9 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
 
   return (
     <div className={styles.container}>
-      {/* Precision Header Row */}
+      {/* Action Header */}
       <div className={styles.headerRow}>
-        <div className={styles.headerText}>
-          <h1 className={styles.title}>Delivery Overview</h1>
-          <p className={styles.subtitle}>
-            Local-first software compilation, automated workflow inference, and internal LAN distribution.
-          </p>
-        </div>
+        <h1 className={styles.title}>Delivery Overview</h1>
         <div className={styles.headerActions}>
           <button
             type="button"
@@ -78,58 +73,40 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Unified 3-Column Metric Cards Grid (DealSpace 2-Tier Architecture) */}
+      {/* Clean Single-Tier Metric Cards Grid */}
       <div className={styles.metricsGrid}>
         {/* Metric 1: Hosted Repos */}
-        <div className={styles.twoTierCard}>
-          <div className={styles.cardTopHalf}>
-            <div className={styles.metricIconBox}>
-              <FolderGit2 size={16} />
-            </div>
-            <div className={styles.metricInfo}>
-              <span className={styles.metricLabel}>Hosted Repositories</span>
-              <span className={styles.metricValue}>{repos.length}</span>
-            </div>
+        <div className={styles.metricCard}>
+          <div className={styles.metricIconBox}>
+            <FolderGit2 size={18} />
           </div>
-          <div className={styles.cardBottomPanel}>
-            <span className={styles.bottomLabel}>Local Filesystem Storage</span>
-            <span className="status-pill info">Private LAN</span>
+          <div className={styles.metricInfo}>
+            <span className={styles.metricLabel}>Hosted Repositories</span>
+            <span className={styles.metricValue}>{repos.length}</span>
           </div>
         </div>
 
         {/* Metric 2: Successful Deliveries */}
-        <div className={styles.twoTierCard}>
-          <div className={styles.cardTopHalf}>
-            <div className={styles.metricIconBoxSuccess}>
-              <CheckCircle2 size={16} />
-            </div>
-            <div className={styles.metricInfo}>
-              <span className={styles.metricLabel}>Successful Deliveries</span>
-              <span className={styles.metricValue}>
-                {runs.filter((r) => r.status === 'passed').length}
-              </span>
-            </div>
+        <div className={styles.metricCard}>
+          <div className={styles.metricIconBoxSuccess}>
+            <CheckCircle2 size={18} />
           </div>
-          <div className={styles.cardBottomPanel}>
-            <span className={styles.bottomLabel}>Execution Sandbox</span>
-            <span className="status-pill success">100% Zero-Egress</span>
+          <div className={styles.metricInfo}>
+            <span className={styles.metricLabel}>Successful Deliveries</span>
+            <span className={styles.metricValue}>
+              {runs.filter((r) => r.status === 'passed').length}
+            </span>
           </div>
         </div>
 
-        {/* Metric 3: LAN Package Store */}
-        <div className={styles.twoTierCard}>
-          <div className={styles.cardTopHalf}>
-            <div className={styles.metricIconBoxAccent}>
-              <Package size={16} />
-            </div>
-            <div className={styles.metricInfo}>
-              <span className={styles.metricLabel}>LAN Packages Available</span>
-              <span className={styles.metricValue}>{releases.length}</span>
-            </div>
+        {/* Metric 3: LAN Packages */}
+        <div className={styles.metricCard}>
+          <div className={styles.metricIconBoxAccent}>
+            <Package size={18} />
           </div>
-          <div className={styles.cardBottomPanel}>
-            <span className={styles.bottomLabel}>Cryptographic Provenance</span>
-            <span className="status-pill neutral">SHA-256 Verified</span>
+          <div className={styles.metricInfo}>
+            <span className={styles.metricLabel}>LAN Packages Available</span>
+            <span className={styles.metricValue}>{releases.length}</span>
           </div>
         </div>
       </div>
@@ -167,7 +144,6 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
                       <span className={styles.repoName}>{repo.name}</span>
                       <span className="status-pill neutral">{repo.language}</span>
                     </div>
-                    <span className={styles.repoDescription}>{repo.description}</span>
                   </div>
 
                   <div className={styles.repoActions}>
@@ -245,7 +221,7 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
 
         {/* Right Column: Fleet Status & Ready-To-Install Binaries */}
         <div className={styles.rightCol}>
-          {/* Network Boundary & Runner Fleet */}
+          {/* Runner Fleet */}
           <div className={styles.sectionCard}>
             <div className={styles.sectionHeader}>
               <div className={styles.sectionTitleWrap}>
@@ -254,26 +230,16 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
               </div>
             </div>
 
-            <div className={styles.securityBox}>
-              <div className={styles.boundaryInfo}>
-                <div className={styles.boundaryDot} />
-                <div className={styles.boundaryText}>
-                  <span className={styles.boundaryTitle}>Private Air-Gap Guard Active</span>
-                  <span className={styles.boundarySub}>No source code or telemetry egress</span>
-                </div>
+            <div className={styles.fleetList}>
+              <div className={styles.fleetItem}>
+                <Server size={13} />
+                <span>runner-lan-01 (Daemon)</span>
+                <span className="status-pill success">Ready</span>
               </div>
-
-              <div className={styles.fleetList}>
-                <div className={styles.fleetItem}>
-                  <Server size={13} />
-                  <span>runner-lan-01 (Daemon)</span>
-                  <span className="status-pill success">Ready</span>
-                </div>
-                <div className={styles.fleetItem}>
-                  <Terminal size={13} />
-                  <span>runner-sandbox-02</span>
-                  <span className="status-pill success">Ready</span>
-                </div>
+              <div className={styles.fleetItem}>
+                <Terminal size={13} />
+                <span>runner-sandbox-02</span>
+                <span className="status-pill success">Ready</span>
               </div>
             </div>
           </div>

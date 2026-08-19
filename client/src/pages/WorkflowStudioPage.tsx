@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Play,
-  CheckCircle2,
   FileCode,
   Layers,
   ArrowRight,
@@ -183,7 +182,7 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
         </div>
       </div>
 
-      {/* Grounded Evidence Box */}
+      {/* Detection Metadata */}
       {detection && (
         <div className={styles.evidenceCard}>
           <div className={styles.evidenceHeader}>
@@ -191,17 +190,12 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
               <Cpu size={15} color="var(--color-primary)" />
               <h2 className={styles.evidenceTitle}>Inferred Toolchain & Target</h2>
             </div>
-            <div className="status-pill success">
-              <CheckCircle2 size={12} />
-              <span>Deterministic Detection (High Confidence)</span>
-            </div>
+            <span className="status-pill neutral">
+              {detection.framework} • {detection.buildTool}
+            </span>
           </div>
 
           <div className={styles.detectionPills}>
-            <div className={styles.pillItem}>
-              <span className={styles.pillLabel}>Framework:</span>
-              <span className={styles.pillValue}>{detection.framework}</span>
-            </div>
             <div className={styles.pillItem}>
               <span className={styles.pillLabel}>Build Tool:</span>
               <span className={styles.pillValue}>{detection.buildTool}</span>
@@ -217,61 +211,55 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
               </span>
             </div>
           </div>
-
-          <div className={styles.citationList}>
-            <span className={styles.citationSectionTitle}>Evidence Grounding Citations:</span>
-            {detection.evidence.map((ev, i) => (
-              <div key={i} className={styles.citationItem}>
-                <FileCode size={13} color="var(--color-text-muted)" />
-                <code className={styles.citationFile}>{ev.file}</code>
-                <span className={styles.citationReason}>— {ev.reason}</span>
-              </div>
-            ))}
-          </div>
         </div>
       )}
 
-      {/* Main Studio Grid: DAG + Inspector */}
-      <div className={styles.studioLayout}>
-        {/* Left: Visual Workflow DAG */}
-        <div className={styles.dagContainer}>
-          <div className={styles.dagHeader}>
-            <div className={styles.dagTitleWrap}>
-              <Layers size={15} color="var(--color-text-muted)" />
-              <h2>Delivery Stages (DAG)</h2>
+      {/* Main Studio View: Left DAG Canvas, Right Inspector */}
+      <div className={styles.studioGrid}>
+        {/* Left: Interactive DAG Node Flow */}
+        <div className={styles.dagCanvasCard}>
+          <div className={styles.canvasHeader}>
+            <div className={styles.canvasTitleWrap}>
+              <Layers size={15} />
+              <h2>Execution Flow (DAG)</h2>
             </div>
-            <span className={styles.dagStepCount}>{workflow?.nodes.length || 0} Stages</span>
+            <span className={styles.stageCountPill}>
+              {workflow?.nodes?.length || 0} Stages Sequential
+            </span>
           </div>
 
-          <div className={styles.nodeList}>
+          <div className={styles.nodesTrack}>
             {workflow?.nodes.map((node, index) => {
               const isSelected = selectedNode?.id === node.id;
               return (
                 <React.Fragment key={node.id}>
-                  <button
-                    type="button"
-                    className={`${styles.nodeCard} ${isSelected ? styles.nodeCardSelected : ''}`}
+                  <div
+                    className={`${styles.nodeCard} ${isSelected ? styles.nodeCardActive : ''}`}
                     onClick={() => setSelectedNode(node)}
-                    aria-label={`Inspect Stage ${index + 1}: ${node.name}`}
                   >
-                    <div className={styles.nodeTop}>
-                      <span className={styles.nodeIndex}>0{index + 1}</span>
-                      <div className="status-pill neutral">{node.phase}</div>
-                      <span className={styles.nodeRunner}>{node.runnerLabel}</span>
+                    <div className={styles.nodeTopRow}>
+                      <div className={styles.nodeOrderBadge}>{index + 1}</div>
+                      <div className={styles.nodeNameWrap}>
+                        <span className={styles.nodeStageName}>{node.name}</span>
+                        <span className={styles.nodeRunnerPill}>{node.runnerLabel}</span>
+                      </div>
                     </div>
 
-                    <div className={styles.nodeName}>{node.name}</div>
-
-                    <div className={styles.nodeCmdWrap}>
-                      <Terminal size={11} />
-                      <code className={styles.nodeCmd}>{node.command}</code>
+                    <div className={styles.nodeCmdPreview}>
+                      <code>{node.command}</code>
                     </div>
-                  </button>
+
+                    {node.evidenceCitation && (
+                      <div className={styles.nodeOutputBadge}>
+                        <span>{node.evidenceCitation}</span>
+                      </div>
+                    )}
+                  </div>
 
                   {index < workflow.nodes.length - 1 && (
                     <div className={styles.nodeConnector}>
                       <div className={styles.connectorLine} />
-                      <ArrowRight size={12} className={styles.connectorArrow} />
+                      <ArrowRight size={14} className={styles.connectorArrow} />
                     </div>
                   )}
                 </React.Fragment>
@@ -280,76 +268,70 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
           </div>
         </div>
 
-        {/* Right: Step Inspector Drawer */}
-        <div className={styles.inspectorDrawer}>
+        {/* Right: Step Inspector & Command Editor */}
+        <div className={styles.inspectorCard}>
           <div className={styles.inspectorHeader}>
             <div className={styles.inspectorTitleWrap}>
               <Settings2 size={15} />
-              <h2>Stage Configuration</h2>
+              <h2>Stage Parameters</h2>
             </div>
+            {selectedNode && (
+              <span className="status-pill neutral">{selectedNode.name}</span>
+            )}
           </div>
 
           {selectedNode ? (
             <div className={styles.inspectorBody}>
-              <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>Stage Identifier</label>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Stage Name</label>
                 <input
                   type="text"
-                  className={styles.textInput}
-                  value={selectedNode.id}
-                  disabled
-                />
-              </div>
-
-              <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>Stage Name</label>
-                <input
-                  type="text"
-                  className={styles.textInput}
+                  className={styles.formInput}
                   value={selectedNode.name}
                   disabled
                 />
               </div>
 
-              <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>Lifecycle Phase</label>
-                <div>
-                  <span className="status-pill info">{selectedNode.phase}</span>
-                </div>
-              </div>
-
-              <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>Assigned Runner Label</label>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Runner Pool</label>
                 <input
                   type="text"
-                  className={styles.textInput}
+                  className={styles.formInput}
                   value={selectedNode.runnerLabel}
                   disabled
                 />
               </div>
 
-              <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>Command (Override Allowed)</label>
+              <div className={styles.formGroup}>
+                <div className={styles.formLabelRow}>
+                  <label className={styles.formLabel}>Execution Command</label>
+                  <Terminal size={12} color="var(--color-text-muted)" />
+                </div>
                 <textarea
-                  className={styles.cmdTextArea}
-                  rows={4}
+                  className={styles.formTextarea}
                   value={selectedNode.command}
                   onChange={(e) => handleCommandChange(e.target.value)}
+                  rows={4}
+                  spellCheck={false}
                 />
-                <span className={styles.fieldHint}>
-                  Executes in isolated local process sandbox with network egress policy.
-                </span>
               </div>
 
               {selectedNode.evidenceCitation && (
-                <div className={styles.citationBox}>
-                  <div className={styles.citationBoxTitle}>Grounding Citation:</div>
-                  <p className={styles.citationBoxText}>{selectedNode.evidenceCitation}</p>
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Manifest Grounding</label>
+                  <div className={styles.outputsList}>
+                    <div className={styles.outputItem}>
+                      <FileCode size={12} color="var(--color-primary)" />
+                      <code>{selectedNode.evidenceCitation}</code>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
           ) : (
-            <div className={styles.noSelection}>Select a stage to inspect parameters</div>
+            <div className={styles.emptyInspector}>
+              <p>Select a node on the left to inspect parameters.</p>
+            </div>
           )}
         </div>
       </div>

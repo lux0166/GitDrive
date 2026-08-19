@@ -5,7 +5,6 @@ import {
   Check,
   Copy,
   ExternalLink,
-  ShieldCheck,
 } from 'lucide-react';
 import { Release } from '../types/client.types.js';
 import styles from './AppCatalogPage.module.css';
@@ -73,16 +72,7 @@ export const AppCatalogPage: React.FC<AppCatalogProps> = ({ onNavigate }) => {
     <div className={styles.container}>
       {/* Header */}
       <div className={styles.headerRow}>
-        <div className={styles.headerText}>
-          <h1 className={styles.title}>LAN Application Store</h1>
-          <p className={styles.subtitle}>
-            Verified binary distribution across local network nodes with cryptographic SHA-256 provenance.
-          </p>
-        </div>
-        <div className="status-pill success">
-          <ShieldCheck size={12} />
-          <span>Air-Gapped Registry Ready</span>
-        </div>
+        <h1 className={styles.title}>LAN Application Store</h1>
       </div>
 
       {/* Filter Ribbon with Count Badges */}
@@ -111,13 +101,12 @@ export const AppCatalogPage: React.FC<AppCatalogProps> = ({ onNavigate }) => {
         })}
       </div>
 
-      {/* 2-Tier DealSpace Package Distribution Cards */}
+      {/* Package Distribution Cards */}
       <div className={styles.cardsGrid}>
         {filteredReleases.map((rel) => {
           const mainArtifact = rel.artifacts[0];
           return (
-            <div key={rel.id} className={styles.packageTwoTierCard}>
-              {/* Top Half */}
+            <div key={rel.id} className={styles.packageCard}>
               <div className={styles.packageTopHalf}>
                 <div className={styles.cardHeaderRow}>
                   <div className={styles.pkgIconBox}>
@@ -129,11 +118,8 @@ export const AppCatalogPage: React.FC<AppCatalogProps> = ({ onNavigate }) => {
                   </div>
                   <span className="status-pill neutral">{mainArtifact?.platform || 'Universal'}</span>
                 </div>
-
-                <p className={styles.pkgNotes}>{rel.notes}</p>
               </div>
 
-              {/* Bottom Full-Width Panel */}
               <div className={styles.packageBottomPanel}>
                 <div className={styles.metaRow}>
                   <div className={styles.fileDetails}>
