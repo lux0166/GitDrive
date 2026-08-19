@@ -2,12 +2,14 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
+import { exec } from 'child_process';
 import { GitService } from './services/git.service.js';
 import { IntelligenceService } from './services/intelligence.service.js';
 import { RunnerService } from './services/runner.service.js';
 import { ReleaseService } from './services/release.service.js';
 import { SettingsService } from './services/settings.service.js';
 import { WorkflowDefinition } from './types/gitdrive.types.js';
+import { EMBEDDED_CLIENT_ASSETS } from './embedded-client.js';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -345,6 +347,8 @@ const clientDistCandidates = [
   path.resolve(process.cwd(), 'dist', 'client'),
   path.resolve(process.cwd(), 'dist'),
 ];
+
+let hasDiskClient = false;
 for (const cand of clientDistCandidates) {
   if (fs.existsSync(cand) && fs.existsSync(path.join(cand, 'index.html'))) {
     app.use(express.static(cand));
@@ -353,14 +357,53 @@ for (const cand of clientDistCandidates) {
         res.sendFile(path.join(cand, 'index.html'));
       }
     });
+    hasDiskClient = true;
     break;
   }
 }
 
+// In-Memory Embedded Client Fallback (For Standalone .exe with Zero External Files)
+if (!hasDiskClient && typeof EMBEDDED_CLIENT_ASSETS !== 'undefined') {
+  app.get('*', (req: Request, res: Response) => {
+    if (req.path.startsWith('/api')) return;
+
+    // Check exact asset match (e.g. /assets/index-xxx.js)
+    const asset = EMBEDDED_CLIENT_ASSETS[req.path];
+    if (asset) {
+      res.setHeader('Content-Type', asset.contentType);
+      if (asset.isBase64) {
+        return res.send(Buffer.from(asset.content, 'base64'));
+      }
+      return res.send(asset.content);
+    }
+
+    // SPA fallback: return index.html for any frontend route
+    const indexAsset = EMBEDDED_CLIENT_ASSETS['/index.html'] || EMBEDDED_CLIENT_ASSETS['/'];
+    if (indexAsset) {
+      res.setHeader('Content-Type', indexAsset.contentType);
+      return res.send(indexAsset.content);
+    }
+
+    res.status(404).send('Not Found');
+  });
+}
+
 app.listen(PORT, () => {
+  const url = `http://localhost:${PORT}`;
   console.log(`\n=================================================`);
-  console.log(`  GitDrive Local-First Control Plane v0.1.0`);
-  console.log(`  Listening on: http://localhost:${PORT}`);
+  console.log(`  GitDrive Local-First Control Plane v0.1.2`);
+  console.log(`  Listening on: ${url}`);
   console.log(`  LAN Network: Ready (Egress: Private Mode)`);
+  console.log(`  Embedded UI: Active`);
   console.log(`=================================================\n`);
+
+  // Auto-launch default browser on startup if running in standalone binary mode
+  if (process.env.GITDRIVE_NO_AUTO_OPEN !== '1') {
+    const startCmd = process.platform === 'win32'
+      ? `start "" "${url}"`
+      : process.platform === 'darwin'
+      ? `open "${url}"`
+      : `xdg-open "${url}"`;
+    exec(startCmd, () => {});
+  }
 });
