@@ -8,7 +8,7 @@
 .actionBar {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   padding: 12px 16px;
   display: flex;
   align-items: center;
@@ -25,7 +25,7 @@
 
 .pickerLabel {
   font-size: 0.8125rem;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--color-text-secondary);
 }
 
@@ -38,6 +38,7 @@
   font-size: 0.8125rem;
   font-weight: 500;
   outline: none;
+  cursor: pointer;
 }
 
 .repoSelect:focus {
@@ -62,11 +63,11 @@
 .evidenceCard {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  padding: 16px;
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .evidenceHeader {
@@ -74,7 +75,7 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--color-border-subtle);
-  padding-bottom: 10px;
+  padding-bottom: 8px;
 }
 
 .evidenceTitleWrap {
@@ -84,7 +85,7 @@
 }
 
 .evidenceTitle {
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: var(--color-text-primary);
 }
@@ -92,8 +93,8 @@
 .detectionPills {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  padding: 10px 12px;
+  gap: 12px;
+  padding: 8px 12px;
   background-color: var(--color-surface-hover);
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border-subtle);
@@ -116,63 +117,32 @@
   color: var(--color-text-primary);
 }
 
-.citationList {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.citationSectionTitle {
-  font-size: 0.6875rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-text-muted);
-}
-
-.citationItem {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.75rem;
-}
-
-.citationFile {
-  font-family: var(--font-mono);
-  background-color: var(--color-surface-hover);
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: var(--color-primary);
-  border: 1px solid var(--color-border-subtle);
-}
-
-.citationReason {
-  color: var(--color-text-secondary);
-}
-
-.studioLayout {
+/* 2-Column Studio Grid */
+.studioGrid {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: 1fr 360px;
   gap: 16px;
+  align-items: start;
 }
 
 @media (max-width: 1024px) {
-  .studioLayout {
+  .studioGrid {
     grid-template-columns: 1fr;
   }
 }
 
-.dagContainer {
+/* Left: DAG Node Canvas */
+.dagCanvasCard {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.dagHeader {
+.canvasHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -180,19 +150,22 @@
   padding-bottom: 10px;
 }
 
-.dagTitleWrap {
+.canvasTitleWrap {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.dagStepCount {
+.stageCountPill {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   color: var(--color-text-muted);
+  background-color: var(--color-surface-hover);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
 }
 
-.nodeList {
+.nodesTrack {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -217,48 +190,69 @@
   background-color: var(--color-surface-active);
 }
 
-.nodeCardSelected {
+.nodeCardActive {
   border-color: var(--color-primary);
   background-color: var(--color-surface-active);
 }
 
-.nodeTop {
+.nodeTopRow {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-.nodeIndex {
-  font-family: var(--font-mono);
+.nodeOrderBadge {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.6875rem;
-  color: var(--color-text-muted);
-}
-
-.nodeRunner {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  color: var(--color-text-muted);
-  margin-left: auto;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
 }
 
-.nodeName {
-  font-size: 0.875rem;
+.nodeNameWrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 0;
+}
+
+.nodeStageName {
+  font-size: 0.8125rem;
   font-weight: 500;
   color: var(--color-text-primary);
 }
 
-.nodeCmdWrap {
+.nodeRunnerPill {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+  background-color: var(--color-surface);
+  padding: 1px 6px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.nodeCmdPreview {
   display: flex;
   align-items: center;
   gap: 6px;
   background-color: var(--color-terminal-bg);
   border: 1px solid var(--color-terminal-border);
-  border-radius: var(--radius-sm);
-  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  padding: 5px 8px;
   color: var(--color-primary);
 }
 
-.nodeCmd {
+.nodeCmdPreview code {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   white-space: nowrap;
@@ -266,17 +260,30 @@
   text-overflow: ellipsis;
 }
 
+.nodeCitationRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+}
+
+.nodeCitationText {
+  font-size: 0.6875rem;
+  color: var(--color-text-secondary);
+}
+
 .nodeConnector {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 2px 0;
+  padding: 1px 0;
 }
 
 .connectorLine {
   width: 1px;
-  height: 12px;
+  height: 10px;
   background-color: var(--color-border);
 }
 
@@ -285,20 +292,23 @@
   transform: rotate(90deg);
 }
 
-.inspectorDrawer {
+/* Right: Stage Parameters Inspector */
+.inspectorCard {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  height: fit-content;
   position: sticky;
-  top: 68px;
+  top: calc(var(--header-height) + 16px);
 }
 
 .inspectorHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid var(--color-border-subtle);
   padding-bottom: 10px;
 }
@@ -312,16 +322,16 @@
 .inspectorBody {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.fieldGroup {
+.formGroup {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.fieldLabel {
+.formLabel {
   font-size: 0.6875rem;
   font-weight: 500;
   color: var(--color-text-secondary);
@@ -329,54 +339,48 @@
   letter-spacing: 0.04em;
 }
 
-.textInput {
+.formLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.formInput {
   background-color: var(--color-surface-hover);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  padding: 6px 8px;
+  padding: 6px 10px;
   color: var(--color-text-primary);
   font-size: 0.75rem;
   font-family: var(--font-mono);
   outline: none;
 }
 
-.cmdTextArea {
+.formTextarea {
   background-color: var(--color-terminal-bg);
   border: 1px solid var(--color-terminal-border);
   border-radius: var(--radius-sm);
-  padding: 6px 8px;
+  padding: 8px 10px;
   color: var(--color-primary);
   font-size: 0.75rem;
   font-family: var(--font-mono);
   outline: none;
   resize: vertical;
+  line-height: 1.4;
 }
 
-.cmdTextArea:focus {
+.formTextarea:focus {
   border-color: var(--color-primary);
 }
 
-.fieldHint {
-  font-size: 0.625rem;
-  color: var(--color-text-muted);
-  line-height: 1.3;
-}
-
 .citationBox {
-  background-color: var(--color-border-subtle);
+  background-color: var(--color-surface-hover);
   border: 1px dashed var(--color-border);
   border-radius: var(--radius-sm);
   padding: 8px 10px;
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.citationBoxTitle {
-  font-size: 0.625rem;
-  font-weight: 500;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
+  align-items: center;
+  gap: 6px;
 }
 
 .citationBoxText {
@@ -384,7 +388,7 @@
   color: var(--color-text-secondary);
 }
 
-.noSelection {
+.emptyInspector {
   padding: 32px 16px;
   text-align: center;
   color: var(--color-text-muted);

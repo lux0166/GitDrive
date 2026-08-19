@@ -128,7 +128,7 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
 
   return (
     <div className={styles.container}>
-      {/* Precision Action Bar */}
+      {/* Top Action Bar */}
       <div className={styles.actionBar}>
         <div className={styles.selectorGroup}>
           <label htmlFor="repo-selector" className={styles.pickerLabel}>
@@ -177,12 +177,12 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
             disabled={!workflow}
           >
             <Play size={14} />
-            <span>Run Delivery Pipeline</span>
+            <span>Run Pipeline</span>
           </button>
         </div>
       </div>
 
-      {/* Detection Metadata */}
+      {/* Detection Metadata Card */}
       {detection && (
         <div className={styles.evidenceCard}>
           <div className={styles.evidenceHeader}>
@@ -214,9 +214,9 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
         </div>
       )}
 
-      {/* Main Studio View: Left DAG Canvas, Right Inspector */}
+      {/* 2-Column Studio Grid: Left DAG Canvas (1fr), Right Inspector (360px) */}
       <div className={styles.studioGrid}>
-        {/* Left: Interactive DAG Node Flow */}
+        {/* Left Column: DAG Node Canvas */}
         <div className={styles.dagCanvasCard}>
           <div className={styles.canvasHeader}>
             <div className={styles.canvasTitleWrap}>
@@ -246,12 +246,13 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
                     </div>
 
                     <div className={styles.nodeCmdPreview}>
+                      <Terminal size={12} color="var(--color-primary)" />
                       <code>{node.command}</code>
                     </div>
 
                     {node.evidenceCitation && (
-                      <div className={styles.nodeOutputBadge}>
-                        <span>{node.evidenceCitation}</span>
+                      <div className={styles.nodeCitationRow}>
+                        <span className={styles.nodeCitationText}>{node.evidenceCitation}</span>
                       </div>
                     )}
                   </div>
@@ -268,7 +269,7 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
           </div>
         </div>
 
-        {/* Right: Step Inspector & Command Editor */}
+        {/* Right Column: Stage Parameters Inspector */}
         <div className={styles.inspectorCard}>
           <div className={styles.inspectorHeader}>
             <div className={styles.inspectorTitleWrap}>
@@ -276,7 +277,7 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
               <h2>Stage Parameters</h2>
             </div>
             {selectedNode && (
-              <span className="status-pill neutral">{selectedNode.name}</span>
+              <span className="status-pill neutral">{selectedNode.phase}</span>
             )}
           </div>
 
@@ -319,11 +320,9 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
               {selectedNode.evidenceCitation && (
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Manifest Grounding</label>
-                  <div className={styles.outputsList}>
-                    <div className={styles.outputItem}>
-                      <FileCode size={12} color="var(--color-primary)" />
-                      <code>{selectedNode.evidenceCitation}</code>
-                    </div>
+                  <div className={styles.citationBox}>
+                    <FileCode size={12} color="var(--color-primary)" />
+                    <span className={styles.citationBoxText}>{selectedNode.evidenceCitation}</span>
                   </div>
                 </div>
               )}
