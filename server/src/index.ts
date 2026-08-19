@@ -4,6 +4,7 @@ import { GitService } from './services/git.service.js';
 import { IntelligenceService } from './services/intelligence.service.js';
 import { RunnerService } from './services/runner.service.js';
 import { ReleaseService } from './services/release.service.js';
+import { SettingsService } from './services/settings.service.js';
 import { WorkflowDefinition } from './types/gitdrive.types.js';
 
 const app = express();
@@ -256,9 +257,61 @@ app.get('/api/catalog', (req: Request, res: Response) => {
   res.json(apps);
 });
 
-app.post('/api/catalog/:id/download', (req: Request, res: Response) => {
-  releaseService.incrementDownload(pStr(req.params.id));
-  res.json({ success: true });
+// 6. LAN Security & Fleet Settings
+const settingsService = new SettingsService();
+
+app.get('/api/settings', (req: Request, res: Response) => {
+  res.json(settingsService.getSettings());
+});
+
+app.post('/api/settings', (req: Request, res: Response) => {
+  try {
+    const updated = settingsService.updateSettings(req.body);
+    res.json(updated);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/api/settings/secrets', (req: Request, res: Response) => {
+  try {
+    const { pattern } = req.body;
+    const updated = settingsService.addSecretPattern(pattern);
+    res.json(updated);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.delete('/api/settings/secrets', (req: Request, res: Response) => {
+  try {
+    const { pattern } = req.body;
+    const updated = settingsService.removeSecretPattern(pattern);
+    res.json(updated);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/api/settings/runners', (req: Request, res: Response) => {
+  try {
+    const { name, type, concurrency } = req.body;
+    if (!name || !type) return res.status(400).json({ error: 'Name and type are required' });
+    const runner = settingsService.registerRunner(name, type, concurrency);
+    res.status(201).json(runner);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.delete('/api/settings/runners/:id', (req: Request, res: Response) => {
+  try {
+    const success = settingsService.deregisterRunner(pStr(req.params.id));
+    if (!success) return res.status(404).json({ error: 'Runner node not found' });
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
 app.listen(PORT, () => {

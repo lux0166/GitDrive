@@ -6,7 +6,7 @@ import {
   Package,
   Sun,
   Moon,
-  ShieldCheck,
+  Settings,
   Server,
   Activity,
   HardDrive,
@@ -73,7 +73,7 @@ export const Shell: React.FC<ShellProps> = ({ currentTab, onTabChange, children 
     { id: 'workflow-studio', label: 'Workflow Intelligence', icon: Cpu },
     { id: 'pipeline-runs', label: 'GitActions Runs', icon: PlayCircle },
     { id: 'app-catalog', label: 'LAN App Store', icon: Package },
-    { id: 'settings', label: 'LAN Security & Fleet', icon: ShieldCheck },
+    { id: 'settings', label: 'Settings & Security', icon: Settings },
   ];
 
   return (
@@ -121,9 +121,7 @@ export const Shell: React.FC<ShellProps> = ({ currentTab, onTabChange, children 
           <div className={styles.lanStatusCard}>
             <div className={styles.lanStatusHeader}>
               <span className={styles.lanStatusTitle}>Private LAN</span>
-              <span className="status-pill success">
-                <span aria-hidden="true">●</span> Online
-              </span>
+              <span className="status-pill neutral">Online</span>
             </div>
             <div className={styles.lanNodeInfo}>
               <Server size={12} aria-hidden="true" />
@@ -148,6 +146,18 @@ export const Shell: React.FC<ShellProps> = ({ currentTab, onTabChange, children 
           </div>
 
           <div className={styles.headerRight}>
+            {/* Quick Settings Icon Button in Header */}
+            <button
+              type="button"
+              className={`btn-ghost ${currentTab === 'settings' ? styles.settingsBtnActive : ''}`}
+              onClick={() => onTabChange('settings')}
+              title="Open Settings & Security"
+              aria-label="Open Settings"
+            >
+              <Settings size={16} aria-hidden="true" />
+            </button>
+
+            {/* Theme Toggle Button */}
             <button
               type="button"
               className="btn-ghost"
@@ -157,6 +167,8 @@ export const Shell: React.FC<ShellProps> = ({ currentTab, onTabChange, children 
             >
               {theme === 'dark' ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
             </button>
+
+            {/* User Profile */}
             <button
               type="button"
               className={styles.userProfile}

@@ -224,6 +224,12 @@
   gap: 12px;
 }
 
+.settingsBtnActive {
+  background-color: var(--color-surface-hover);
+  color: var(--color-primary);
+  border-color: var(--color-border);
+}
+
 .userProfile {
   display: flex;
   align-items: center;
