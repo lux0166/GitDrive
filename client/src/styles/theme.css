@@ -1,0 +1,103 @@
+/* Rico & DealSpace Design Engineering Tokens */
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --header-height: 52px;
+  --sidebar-width: 240px;
+
+  /* Strict Concentric Radii (8px - 12px) */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* Universal Micro-Animation Timings (0.15s cubic-bezier) */
+  --transition-fast: 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-sweep: 380ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Light Theme (DealSpace #F6F7F9 clean slate + #F8F7F4 bottom panel) */
+  --color-bg: #F6F7F9;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #F4F4F5;
+  --color-surface-active: #E4E4E7;
+  --color-panel-bottom: #F8F7F4;
+  --color-card: #FFFFFF;
+  --color-border: #E4E4E7;
+  --color-border-subtle: #F0EFEA;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4B5563;
+  --color-text-muted: #9CA3AF;
+
+  --color-primary: #0284C7;
+  --color-primary-hover: #0369A1;
+  --color-primary-text: #FFFFFF;
+  --color-accent: #4F46E5;
+
+  --color-success: #16A34A;
+  --color-success-bg: rgba(22, 163, 74, 0.08);
+  --color-success-text: #15803D;
+
+  --color-warning: #D97706;
+  --color-warning-bg: rgba(217, 119, 6, 0.08);
+  --color-warning-text: #B45309;
+
+  --color-danger: #DC2626;
+  --color-danger-bg: rgba(220, 38, 38, 0.08);
+  --color-danger-text: #B91C1C;
+
+  --color-info: #0284C7;
+  --color-info-bg: rgba(2, 132, 199, 0.08);
+  --color-info-text: #0369A1;
+
+  --color-terminal-bg: #18181B;
+  --color-terminal-border: #27272A;
+
+  --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] {
+  /* Dark Theme (Rico Tailwind Neutral #09090B deep canvas + #18181B surface) */
+  --color-bg: #09090B;
+  --color-surface: #18181B;
+  --color-surface-hover: #222226;
+  --color-surface-active: #27272A;
+  --color-panel-bottom: #141416;
+  --color-card: #18181B;
+  --color-border: #27272A;
+  --color-border-subtle: #1F1F23;
+  --color-text-primary: #F4F4F5;
+  --color-text-secondary: #A1A1AA;
+  --color-text-muted: #71717A;
+
+  --color-primary: #38BDF8;
+  --color-primary-hover: #0EA5E9;
+  --color-primary-text: #09090B;
+  --color-accent: #818CF8;
+
+  --color-success: #22C55E;
+  --color-success-bg: rgba(34, 197, 94, 0.12);
+  --color-success-text: #4ADE80;
+
+  --color-warning: #F59E0B;
+  --color-warning-bg: rgba(245, 158, 11, 0.12);
+  --color-warning-text: #FBBF24;
+
+  --color-danger: #EF4444;
+  --color-danger-bg: rgba(239, 68, 68, 0.12);
+  --color-danger-text: #F87171;
+
+  --color-info: #38BDF8;
+  --color-info-bg: rgba(56, 189, 248, 0.12);
+  --color-info-text: #7DD3FC;
+
+  --color-terminal-bg: #0D0D11;
+  --color-terminal-border: #27272A;
+
+  --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+}

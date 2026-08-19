@@ -1,0 +1,13 @@
+{
+  "id": "inventory-service",
+  "name": "inventory-service",
+  "description": "High-throughput inventory tracking daemon with barcode scanner listener",
+  "defaultBranch": "main",
+  "isPrivate": true,
+  "path": "C:\\Users\\Tran Huy\\Downloads\\GitDrive\\server\\data\\repos\\inventory-service",
+  "createdAt": "2026-08-12T05:11:19.917Z",
+  "updatedAt": "2026-08-19T03:11:19.917Z",
+  "language": "C#",
+  "stars": 8,
+  "forks": 1
+}

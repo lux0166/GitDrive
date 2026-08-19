@@ -1,0 +1,13 @@
+{
+  "id": "pos-terminal",
+  "name": "pos-terminal",
+  "description": "Point-of-Sale LAN Desktop Terminal with offline invoice sync",
+  "defaultBranch": "main",
+  "isPrivate": true,
+  "path": "C:\\Users\\Tran Huy\\Downloads\\GitDrive\\server\\data\\repos\\pos-terminal",
+  "createdAt": "2026-08-16T05:11:19.913Z",
+  "updatedAt": "2026-08-19T04:11:19.914Z",
+  "language": "TypeScript",
+  "stars": 12,
+  "forks": 2
+}

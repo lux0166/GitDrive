@@ -1,0 +1,519 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* 2-Tier Repo Header Card */
+.repoHeaderCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.headerMainRow {
+  padding: 16px 20px 14px 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.headerTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.repoTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.repoIconBadge {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.repoSelect {
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+}
+
+.repoSelect:focus {
+  border-color: var(--color-primary);
+}
+
+.repoDesc {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  line-height: 1.35;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Tabs Navigation Ribbon */
+.tabsNav {
+  background-color: var(--color-panel-bottom);
+  border-top: 1px solid var(--color-border-subtle);
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tabBtn {
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--color-text-secondary);
+  padding: 10px 14px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 0;
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.tabBtn:hover {
+  color: var(--color-text-primary);
+  transform: none;
+}
+
+.tabBtnActive {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  background-color: transparent;
+}
+
+.tabCount {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  background-color: var(--color-surface-hover);
+  padding: 1px 5px;
+  border-radius: var(--radius-full);
+}
+
+/* 2-Pane Code Explorer Layout */
+.codeLayout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .codeLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left File Tree */
+.fileTreeCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 560px;
+}
+
+.treeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding-bottom: 8px;
+}
+
+.branchPill {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  background-color: var(--color-surface-hover);
+  padding: 1px 6px;
+  border-radius: var(--radius-xs);
+  color: var(--color-primary);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.fileTreeList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  max-height: 500px;
+}
+
+.fileItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: var(--radius-xs);
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fileItem:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+.fileItemActive {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border);
+  color: var(--color-primary);
+}
+
+.fileNameText {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fileSizeText {
+  font-size: 0.625rem;
+  color: var(--color-text-muted);
+}
+
+/* Right File Viewer & Editor */
+.fileViewerCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.viewerHeader {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.viewerTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.viewerPath {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.viewerLinesCount {
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+}
+
+.markdownBody {
+  padding: 20px;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.markdownBody pre {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+  background-color: var(--color-surface-hover);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+}
+
+/* Real Code Editor with Line Gutter */
+.codeEditorContainer {
+  display: flex;
+  background-color: var(--color-terminal-bg);
+  min-height: 480px;
+  max-height: 540px;
+  overflow-y: auto;
+  border-top: 1px solid var(--color-terminal-border);
+}
+
+.gutter {
+  width: 48px;
+  padding: 12px 8px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-right: 1px solid var(--color-terminal-border);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.gutterLine {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
+
+.codeContent {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  overflow-x: auto;
+}
+
+.codeLineText {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: #E4E4E7;
+  white-space: pre;
+}
+
+/* Commits Tab */
+.commitsContainer {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.commitsHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding-bottom: 8px;
+}
+
+.commitsList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.commitRow {
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.commitLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.commitDot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.commitInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.commitMessage {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.commitMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+}
+
+.commitAuthor {
+  color: var(--color-text-secondary);
+}
+
+.commitDate {
+  font-family: var(--font-mono);
+}
+
+.commitShaPill {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  background-color: var(--color-terminal-bg);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  color: var(--color-primary);
+  border: 1px solid var(--color-terminal-border);
+}
+
+/* Diff Tab */
+.diffContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.diffHeader {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diffFileCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.diffFileHeader {
+  background-color: var(--color-surface-hover);
+  border-bottom: 1px solid var(--color-border);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.diffPathWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diffPath {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-primary);
+}
+
+.diffCounts {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+}
+
+.diffAddCount {
+  color: #4ADE80;
+}
+
+.diffDelCount {
+  color: #F87171;
+}
+
+.diffLinesList {
+  background-color: var(--color-terminal-bg);
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.diffLine {
+  display: flex;
+  align-items: center;
+  padding: 1px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.diffLineGutter {
+  width: 36px;
+  color: var(--color-text-muted);
+  font-size: 0.625rem;
+  user-select: none;
+}
+
+.diffLineText {
+  white-space: pre;
+}
+
+.diffAddLine {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #4ADE80;
+}
+
+.diffDelLine {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #F87171;
+}
+
+.diffContextLine {
+  color: #71717A;
+}

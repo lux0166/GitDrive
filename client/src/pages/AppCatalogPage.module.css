@@ -1,0 +1,209 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.headerRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: 1.375rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.subtitle {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+.filterRibbon {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  overflow-x: auto;
+}
+
+.filterBtn {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-xs);
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filterBtn:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+.filterBtnActive {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border);
+  color: var(--color-primary);
+}
+
+.filterCount {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  background-color: var(--color-surface-active);
+  padding: 1px 4px;
+  border-radius: var(--radius-full);
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* 2-Tier DealSpace Card */
+.packageTwoTierCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.packageTopHalf {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardHeaderRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pkgIconBox {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.pkgInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.pkgTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+.pkgVersion {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+}
+
+.pkgNotes {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  line-height: 1.35;
+}
+
+/* Bottom Full-Width Strip */
+.packageBottomPanel {
+  background-color: var(--color-panel-bottom);
+  border-top: 1px solid var(--color-border-subtle);
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.6875rem;
+}
+
+.fileDetails {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.fileName {
+  font-family: var(--font-mono);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+.fileSize {
+  color: var(--color-text-muted);
+}
+
+.shaContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.shaLabel {
+  color: var(--color-text-muted);
+}
+
+.shaCode {
+  font-family: var(--font-mono);
+  background-color: var(--color-surface);
+  padding: 1px 4px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-primary);
+}
+
+.actionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px dashed var(--color-border-subtle);
+  padding-top: 8px;
+}

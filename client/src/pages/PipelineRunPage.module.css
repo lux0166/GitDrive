@@ -1,0 +1,374 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.topBar {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.runPickerGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pickerLabel {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}
+
+.runSelect {
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-sm);
+  padding: 5px 10px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  outline: none;
+}
+
+.runMetaPills {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+}
+
+.metaLabel {
+  color: var(--color-text-muted);
+}
+
+.metaCode {
+  font-family: var(--font-mono);
+  background-color: var(--color-surface-hover);
+  padding: 1px 5px;
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.metaValue {
+  font-family: var(--font-mono);
+  color: var(--color-text-primary);
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.stagesBar {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+}
+
+.stagesTitle {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.stageCardsList {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.stageCard {
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 110px;
+  flex-shrink: 0;
+}
+
+.stagePassed {
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.stageRunning {
+  border-color: var(--color-primary);
+  background-color: var(--color-surface-active);
+}
+
+.stagePending {
+  opacity: 0.6;
+}
+
+.stageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stageNumber {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--color-text-muted);
+}
+
+.stageName {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.stageDuration {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--color-text-muted);
+}
+
+.terminalContainer {
+  background-color: var(--color-terminal-bg);
+  border: 1px solid var(--color-terminal-border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 420px;
+}
+
+.terminalHeader {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-terminal-border);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.terminalTitleWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminalTitle {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.terminalControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.searchWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 8px;
+  color: var(--color-text-muted);
+}
+
+.searchInput {
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px 4px 26px;
+  color: var(--color-text-primary);
+  font-size: 0.75rem;
+  width: 140px;
+  outline: none;
+}
+
+.searchInput:focus {
+  border-color: var(--color-primary);
+}
+
+.btnAutoScrollActive {
+  color: var(--color-primary) !important;
+}
+
+.terminalBody {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 440px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.emptyLogs {
+  color: var(--color-text-muted);
+  font-style: italic;
+  padding: 24px;
+  text-align: center;
+}
+
+.logLine {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  word-break: break-all;
+}
+
+.logTimestamp {
+  color: var(--color-text-muted);
+  font-size: 0.6875rem;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.logStdout {
+  color: #D4D4D8;
+}
+
+.logStderr {
+  color: #F87171;
+}
+
+.logSystem {
+  color: #38BDF8;
+}
+
+.artifactsBox {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.artifactsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding-bottom: 10px;
+}
+
+.artifactsTitleWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.artifactsTitle {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.artifactList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.artifactCard {
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.artLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.artNameWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.artName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.artFileMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.artFileName {
+  font-family: var(--font-mono);
+  color: var(--color-text-primary);
+}
+
+.shaWrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.6875rem;
+}
+
+.shaLabel {
+  color: var(--color-text-muted);
+}
+
+.shaCode {
+  font-family: var(--font-mono);
+  background-color: var(--color-terminal-bg);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--color-primary);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.artRight {
+  flex-shrink: 0;
+}

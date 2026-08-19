@@ -1,0 +1,13 @@
+{
+  "id": "lan-gateway",
+  "name": "lan-gateway",
+  "description": "Zero-latency packet router and proxy for private office networks",
+  "defaultBranch": "main",
+  "isPrivate": false,
+  "path": "C:\\Users\\Tran Huy\\Downloads\\GitDrive\\server\\data\\repos\\lan-gateway",
+  "createdAt": "2026-08-07T05:11:19.919Z",
+  "updatedAt": "2026-08-19T04:41:19.919Z",
+  "language": "Rust",
+  "stars": 24,
+  "forks": 5
+}
