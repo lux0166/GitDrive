@@ -22,13 +22,14 @@ export class RunnerService extends EventEmitter {
 
   constructor() {
     super();
-    const dataDir = fs.existsSync(path.resolve(process.cwd(), 'server', 'data'))
+    const dataDir = process.env.GITDRIVE_DATA_DIR
+      ? path.resolve(process.env.GITDRIVE_DATA_DIR)
+      : fs.existsSync(path.resolve(process.cwd(), 'server', 'data'))
       ? path.resolve(process.cwd(), 'server', 'data')
       : path.resolve(process.cwd(), 'data');
     this.reposBasePath = path.join(dataDir, 'repos');
     this.artifactsBasePath = path.join(dataDir, 'artifacts');
     this.ensureDirectoryExists(this.artifactsBasePath);
-    this.seedDefaultRuns();
   }
 
   private ensureDirectoryExists(dirPath: string) {
@@ -292,55 +293,5 @@ export class RunnerService extends EventEmitter {
 
   private sleep(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  private seedDefaultRuns() {
-    const seededRun: PipelineRun = {
-      id: 'run-prev-001',
-      workflowId: 'wf-pos-terminal',
-      repoId: 'pos-terminal',
-      repoName: 'pos-terminal',
-      commitSha: 'f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6',
-      branch: 'main',
-      trigger: 'push',
-      status: 'passed',
-      startTime: new Date(Date.now() - 1000 * 60 * 35).toISOString(),
-      endTime: new Date(Date.now() - 1000 * 60 * 34).toISOString(),
-      duration: 54,
-      nodes: [
-        { id: 'step-checkout', name: 'Checkout Repository Source', phase: 'checkout', command: 'git clone local://repos/pos-terminal .', runnerLabel: 'local-host', status: 'success', duration: 0.4, dependencies: [] },
-        { id: 'step-setup', name: 'Setup Node.js Environment', phase: 'setup', command: 'setup-node --version 22.x', runnerLabel: 'local-host', status: 'success', duration: 0.5, dependencies: ['step-checkout'] },
-        { id: 'step-deps', name: 'Install Node Dependencies', phase: 'dependencies', command: 'npm ci --prefer-offline', runnerLabel: 'local-host', status: 'success', duration: 0.7, dependencies: ['step-setup'] },
-        { id: 'step-build', name: 'Compile & Bundle Web App', phase: 'build', command: 'npm run build', runnerLabel: 'local-host', status: 'success', duration: 0.9, dependencies: ['step-deps'] },
-        { id: 'step-test', name: 'Execute Test Suites', phase: 'test', command: 'npm test', runnerLabel: 'local-host', status: 'success', duration: 0.6, dependencies: ['step-build'] },
-        { id: 'step-pkg', name: 'Package Distributable Bundle', phase: 'package', command: 'electron-builder --win --dir', runnerLabel: 'windows-host', status: 'success', duration: 1.0, dependencies: ['step-test'] },
-        { id: 'step-release', name: 'Sign & Compute SHA-256 Provenance', phase: 'release', command: 'gitdrive-release --checksum sha256', runnerLabel: 'local-host', status: 'success', duration: 0.5, dependencies: ['step-pkg'] },
-        { id: 'step-dist', name: 'Publish to LAN App Catalog', phase: 'distribute', command: 'gitdrive-distribute --channel stable', runnerLabel: 'local-host', status: 'success', duration: 0.4, dependencies: ['step-release'] },
-      ],
-      logs: [
-        { timestamp: new Date(Date.now() - 1000 * 60 * 35).toISOString(), stepId: 'step-checkout', text: 'Starting GitDrive Local Runner harness on node [local-runner-01]', stream: 'system' },
-        { timestamp: new Date(Date.now() - 1000 * 60 * 35).toISOString(), stepId: 'step-checkout', text: 'Cloning local repository from /data/repos/pos-terminal...', stream: 'stdout' },
-        { timestamp: new Date(Date.now() - 1000 * 60 * 35).toISOString(), stepId: 'step-setup', text: 'Node.js v22.10.0 (x64 Windows) [OK]', stream: 'stdout' },
-        { timestamp: new Date(Date.now() - 1000 * 60 * 34).toISOString(), stepId: 'step-build', text: 'vite v6.0.3 building for production... ✓ built in 420ms', stream: 'stdout' },
-        { timestamp: new Date(Date.now() - 1000 * 60 * 34).toISOString(), stepId: 'step-test', text: 'Tests 3 passed (3) Duration 238ms', stream: 'stdout' },
-        { timestamp: new Date(Date.now() - 1000 * 60 * 34).toISOString(), stepId: 'step-release', text: 'Artifact Generated: pos-terminal-v2.4.0-win-x64.exe (51.2 MB) SHA-256: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', stream: 'system' },
-      ],
-      artifacts: [
-        {
-          id: 'art-pos-01',
-          runId: 'run-prev-001',
-          repoId: 'pos-terminal',
-          name: 'pos-terminal Windows Installer (.exe)',
-          fileName: 'pos-terminal-v2.4.0-win-x64.exe',
-          filePath: '/artifacts/pos-terminal/pos-terminal-v2.4.0-win-x64.exe',
-          sizeBytes: 51240000,
-          sha256: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08',
-          platform: 'Windows x64',
-          createdAt: new Date(Date.now() - 1000 * 60 * 34).toISOString(),
-        },
-      ],
-    };
-
-    this.runs.set(seededRun.id, seededRun);
   }
 }

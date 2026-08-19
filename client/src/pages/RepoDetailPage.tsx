@@ -38,11 +38,19 @@ export const RepoDetailPage: React.FC<RepoDetailProps> = ({
   const [selectedFile, setSelectedFile] = useState<string>('README.md');
   const [fileBlob, setFileBlob] = useState<FileBlob | null>(null);
 
-  // Commits & Diff states
   const [commits, setCommits] = useState<Commit[]>([]);
   const [diffs, setDiffs] = useState<DiffFile[]>([]);
   const [copiedClone, setCopiedClone] = useState(false);
   const [copiedBlob, setCopiedBlob] = useState(false);
+
+  // New Repository Modal state
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [newRepoName, setNewRepoName] = useState('');
+  const [newRepoDesc, setNewRepoDesc] = useState('');
+  const [newRepoLang, setNewRepoLang] = useState('TypeScript');
+  const [newRepoPrivate, setNewRepoPrivate] = useState(true);
+  const [isCreating, setIsCreating] = useState(false);
+  const [createError, setCreateError] = useState('');
 
   useEffect(() => {
     fetchRepos();
@@ -138,11 +146,117 @@ export const RepoDetailPage: React.FC<RepoDetailProps> = ({
     setTimeout(() => setCopiedBlob(false), 2000);
   };
 
+  const handleCreateRepo = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newRepoName.trim()) {
+      setCreateError('Repository name is required');
+      return;
+    }
+    try {
+      setIsCreating(true);
+      setCreateError('');
+      const res = await fetch('/api/repos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newRepoName.trim(),
+          description: newRepoDesc.trim(),
+          language: newRepoLang,
+          isPrivate: newRepoPrivate,
+        }),
+      });
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || 'Failed to create repository');
+      }
+      const created = await res.json();
+      setIsCreateOpen(false);
+      setNewRepoName('');
+      setNewRepoDesc('');
+      await fetchRepos();
+      setSelectedRepoId(created.id);
+    } catch (err: any) {
+      setCreateError(err.message);
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
   const isMarkdown = selectedFile.toLowerCase().endsWith('.md');
   const codeLines = fileBlob?.content ? fileBlob.content.split('\n') : [];
 
   return (
     <div className={styles.container}>
+      {/* Creation Modal */}
+      {isCreateOpen && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ background: '#121215', border: '1px solid #27272a', borderRadius: '10px', padding: '24px', width: '480px', maxWidth: '90vw' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: 600, color: '#f4f4f5', margin: '0 0 16px' }}>Create Local Git Repository</h2>
+            {createError && <p style={{ color: '#ef4444', fontSize: '12px', margin: '0 0 12px' }}>{createError}</p>}
+            <form onSubmit={handleCreateRepo}>
+              <div style={{ marginBottom: '14px' }}>
+                <label style={{ display: 'block', fontSize: '12px', color: '#a1a1aa', marginBottom: '6px' }}>Repository Name *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. inventory-service"
+                  value={newRepoName}
+                  onChange={(e) => setNewRepoName(e.target.value)}
+                  style={{ width: '100%', background: '#18181b', border: '1px solid #27272a', borderRadius: '6px', padding: '8px 12px', color: '#fff', fontSize: '13px', boxSizing: 'border-box' }}
+                />
+              </div>
+
+              <div style={{ marginBottom: '14px' }}>
+                <label style={{ display: 'block', fontSize: '12px', color: '#a1a1aa', marginBottom: '6px' }}>Description</label>
+                <input
+                  type="text"
+                  placeholder="Brief summary of service"
+                  value={newRepoDesc}
+                  onChange={(e) => setNewRepoDesc(e.target.value)}
+                  style={{ width: '100%', background: '#18181b', border: '1px solid #27272a', borderRadius: '6px', padding: '8px 12px', color: '#fff', fontSize: '13px', boxSizing: 'border-box' }}
+                />
+              </div>
+
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '12px', color: '#a1a1aa', marginBottom: '6px' }}>Primary Language / Manifest</label>
+                <select
+                  value={newRepoLang}
+                  onChange={(e) => setNewRepoLang(e.target.value)}
+                  style={{ width: '100%', background: '#18181b', border: '1px solid #27272a', borderRadius: '6px', padding: '8px 12px', color: '#fff', fontSize: '13px' }}
+                >
+                  <option value="TypeScript">TypeScript (package.json + Vite/Node)</option>
+                  <option value="JavaScript">JavaScript (Node.js)</option>
+                  <option value="C#">C# / .NET 8 (.csproj)</option>
+                  <option value="Rust">Rust (Cargo.toml)</option>
+                  <option value="Go">Go (go.mod)</option>
+                  <option value="Python">Python (pyproject.toml / requirements.txt)</option>
+                </select>
+              </div>
+
+              <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <input
+                  type="checkbox"
+                  id="new-repo-private"
+                  checked={newRepoPrivate}
+                  onChange={(e) => setNewRepoPrivate(e.target.checked)}
+                  style={{ accentColor: '#27272a', cursor: 'pointer' }}
+                />
+                <label htmlFor="new-repo-private" style={{ fontSize: '12px', color: '#d4d4d8', cursor: 'pointer' }}>
+                  Private LAN Repository (Restricted to internal network nodes)
+                </label>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+                <button type="button" className="btn-secondary" onClick={() => setIsCreateOpen(false)}>Cancel</button>
+                <button type="submit" className="btn-primary" disabled={isCreating}>
+                  {isCreating ? 'Creating...' : 'Create Repository'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* 2-Tier Repo Header Card */}
       <div className={styles.repoHeaderCard}>
         <div className={styles.headerMainRow}>
@@ -151,71 +265,101 @@ export const RepoDetailPage: React.FC<RepoDetailProps> = ({
               <div className={styles.repoIconBadge}>
                 <FolderGit2 size={18} />
               </div>
-              <select
-                className={styles.repoSelect}
-                value={selectedRepoId}
-                onChange={(e) => setSelectedRepoId(e.target.value)}
-                aria-label="Select active repository"
-              >
-                {repos.map((r) => (
-                  <option key={r.id} value={r.id}>
-                    {r.name}
-                  </option>
-                ))}
-              </select>
-              <span className="status-pill neutral">{repo?.language || 'TypeScript'}</span>
-              <span className="status-pill neutral">{repo?.isPrivate ? 'Private LAN' : 'Public LAN'}</span>
+              {repos.length > 0 ? (
+                <select
+                  className={styles.repoSelect}
+                  value={selectedRepoId}
+                  onChange={(e) => setSelectedRepoId(e.target.value)}
+                  aria-label="Select active repository"
+                >
+                  {repos.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <span style={{ fontSize: '15px', fontWeight: 600, color: '#a1a1aa' }}>No Repositories Hosted</span>
+              )}
+              {repo && (
+                <>
+                  <span className="status-pill neutral">{repo.language || 'TypeScript'}</span>
+                  <span className="status-pill neutral">{repo.isPrivate ? 'Private LAN' : 'Public LAN'}</span>
+                </>
+              )}
             </div>
-            <p className={styles.repoDesc}>{repo?.description}</p>
+            <p className={styles.repoDesc}>{repo?.description || 'Manage local Git repositories, inspect code trees, commits, and diffs.'}</p>
           </div>
 
           <div className={styles.headerActions}>
-            <button type="button" className="btn-secondary" onClick={handleCopyCloneUrl}>
-              {copiedClone ? <Check size={13} /> : <Copy size={13} />}
-              <span>{copiedClone ? 'Clone URL Copied' : 'Clone URL'}</span>
+            <button type="button" className="btn-secondary" onClick={() => setIsCreateOpen(true)}>
+              <FolderGit2 size={13} />
+              <span>+ New Repository</span>
             </button>
-            <button
-              type="button"
-              className="btn-primary"
-              onClick={() => onNavigate('workflow-studio', selectedRepoId)}
-            >
-              <Cpu size={14} />
-              <span>Workflow Studio</span>
-            </button>
+            {repo && (
+              <>
+                <button type="button" className="btn-secondary" onClick={handleCopyCloneUrl}>
+                  {copiedClone ? <Check size={13} /> : <Copy size={13} />}
+                  <span>{copiedClone ? 'Clone URL Copied' : 'Clone URL'}</span>
+                </button>
+                <button
+                  type="button"
+                  className="btn-primary"
+                  onClick={() => onNavigate('workflow-studio', selectedRepoId)}
+                >
+                  <Cpu size={14} />
+                  <span>Workflow Studio</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
 
         {/* Tab Navigation Ribbon */}
-        <div className={styles.tabsNav}>
-          <button
-            type="button"
-            className={`${styles.tabBtn} ${activeTab === 'code' ? styles.tabBtnActive : ''}`}
-            onClick={() => setActiveTab('code')}
-          >
-            <FileCode size={14} />
-            <span>Code & Files</span>
-            <span className={styles.tabCount}>{fileTree.length}</span>
-          </button>
-          <button
-            type="button"
-            className={`${styles.tabBtn} ${activeTab === 'commits' ? styles.tabBtnActive : ''}`}
-            onClick={() => setActiveTab('commits')}
-          >
-            <GitCommit size={14} />
-            <span>Commits</span>
-            <span className={styles.tabCount}>{commits.length}</span>
-          </button>
-          <button
-            type="button"
-            className={`${styles.tabBtn} ${activeTab === 'diff' ? styles.tabBtnActive : ''}`}
-            onClick={() => setActiveTab('diff')}
-          >
-            <GitBranch size={14} />
-            <span>Working Tree Diff</span>
-            <span className={styles.tabCount}>{diffs.length}</span>
+        {repo && (
+          <div className={styles.tabsNav}>
+            <button
+              type="button"
+              className={`${styles.tabBtn} ${activeTab === 'code' ? styles.tabBtnActive : ''}`}
+              onClick={() => setActiveTab('code')}
+            >
+              <FileCode size={14} />
+              <span>Code & Files</span>
+              <span className={styles.tabCount}>{fileTree.length}</span>
+            </button>
+            <button
+              type="button"
+              className={`${styles.tabBtn} ${activeTab === 'commits' ? styles.tabBtnActive : ''}`}
+              onClick={() => setActiveTab('commits')}
+            >
+              <GitCommit size={14} />
+              <span>Commits</span>
+              <span className={styles.tabCount}>{commits.length}</span>
+            </button>
+            <button
+              type="button"
+              className={`${styles.tabBtn} ${activeTab === 'diff' ? styles.tabBtnActive : ''}`}
+              onClick={() => setActiveTab('diff')}
+            >
+              <GitBranch size={14} />
+              <span>Working Tree Diff</span>
+              <span className={styles.tabCount}>{diffs.length}</span>
+            </button>
+          </div>
+        )}
+      </div>
+
+      {repos.length === 0 && (
+        <div style={{ padding: '60px 24px', textAlign: 'center', background: '#121215', borderRadius: '8px', border: '1px solid #27272a', marginTop: '24px' }}>
+          <FolderGit2 size={36} style={{ opacity: 0.3, margin: '0 auto 16px' }} />
+          <h3 style={{ margin: '0 0 8px', fontSize: '15px', color: '#f4f4f5' }}>No Hosted Repositories Yet</h3>
+          <p style={{ color: '#71717a', fontSize: '13px', margin: '0 0 20px' }}>Create a new repository to begin local-first software delivery on your private network.</p>
+          <button type="button" className="btn-primary" onClick={() => setIsCreateOpen(true)}>
+            <FolderGit2 size={14} />
+            <span>Create Repository</span>
           </button>
         </div>
-      </div>
+      )}
 
       {/* Tab 1: Code Explorer & Full Editor */}
       {activeTab === 'code' && (

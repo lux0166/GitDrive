@@ -134,29 +134,35 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
           <label htmlFor="repo-selector" className={styles.pickerLabel}>
             Target Repository:
           </label>
-          <select
-            id="repo-selector"
-            className={styles.repoSelect}
-            value={selectedRepoId}
-            onChange={(e) => setSelectedRepoId(e.target.value)}
-          >
-            {repos.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.name} ({r.language})
-              </option>
-            ))}
-          </select>
+          {repos.length > 0 ? (
+            <select
+              id="repo-selector"
+              className={styles.repoSelect}
+              value={selectedRepoId}
+              onChange={(e) => setSelectedRepoId(e.target.value)}
+            >
+              {repos.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.name} ({r.language})
+                </option>
+              ))}
+            </select>
+          ) : (
+            <span style={{ fontSize: '13px', color: '#71717a', fontStyle: 'italic' }}>No repositories hosted</span>
+          )}
 
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={() => scanRepository(selectedRepoId)}
-            disabled={isScanning}
-            aria-label="Re-scan repository manifests"
-          >
-            <RefreshCw size={13} className={isScanning ? styles.spin : ''} />
-            <span>{isScanning ? 'Analyzing AST...' : 'Scan Repository'}</span>
-          </button>
+          {repos.length > 0 && (
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => scanRepository(selectedRepoId)}
+              disabled={isScanning}
+              aria-label="Re-scan repository manifests"
+            >
+              <RefreshCw size={13} className={isScanning ? styles.spin : ''} />
+              <span>{isScanning ? 'Analyzing AST...' : 'Scan Repository'}</span>
+            </button>
+          )}
         </div>
 
         <div className={styles.actionButtons}>
@@ -164,7 +170,7 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
             type="button"
             className="btn-secondary"
             onClick={handleSaveWorkflow}
-            disabled={isSaving}
+            disabled={isSaving || !workflow}
           >
             {saveSuccess ? <Check size={14} /> : <Save size={14} />}
             <span>{saveSuccess ? 'Saved' : 'Save Workflow'}</span>
@@ -181,6 +187,19 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
           </button>
         </div>
       </div>
+
+      {repos.length === 0 && (
+        <div style={{ padding: '60px 24px', textAlign: 'center', background: '#121215', borderRadius: '8px', border: '1px solid #27272a', margin: '24px 0' }}>
+          <Cpu size={36} style={{ opacity: 0.3, margin: '0 auto 16px' }} />
+          <h3 style={{ margin: '0 0 8px', fontSize: '15px', color: '#f4f4f5' }}>No Repositories to Analyze</h3>
+          <p style={{ color: '#71717a', fontSize: '13px', margin: '0 0 20px', maxWidth: '440px', marginLeft: 'auto', marginRight: 'auto' }}>
+            Workflow Studio automatically analyzes repo manifests (`package.json`, `.csproj`, `Cargo.toml`) to generate Directed Acyclic Graph (DAG) build pipelines.
+          </p>
+          <button type="button" className="btn-primary" onClick={() => onNavigate('repositories')}>
+            <span>Create Repository First</span>
+          </button>
+        </div>
+      )}
 
       {/* Detection Metadata Card */}
       {detection && (

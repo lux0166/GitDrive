@@ -39,8 +39,8 @@ Thumbs.db
 .tempmediaStorage/
 temp/
 tmp/
-server/data/artifacts/
-data/artifacts/
+data/
+server/data/
 
 # Agent History & Internal Documents (Local only)
 .agent-history/

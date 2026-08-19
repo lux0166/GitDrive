@@ -123,18 +123,22 @@ export const PipelineRunPage: React.FC<PipelineRunProps> = ({
           <label htmlFor="run-select" className={styles.pickerLabel}>
             Pipeline Run:
           </label>
-          <select
-            id="run-select"
-            className={styles.runSelect}
-            value={activeRunId}
-            onChange={(e) => setActiveRunId(e.target.value)}
-          >
-            {runs.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.repoName} — {r.id} ({r.status})
-              </option>
-            ))}
-          </select>
+          {runs.length > 0 ? (
+            <select
+              id="run-select"
+              className={styles.runSelect}
+              value={activeRunId}
+              onChange={(e) => setActiveRunId(e.target.value)}
+            >
+              {runs.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.repoName} — {r.id} ({r.status})
+                </option>
+              ))}
+            </select>
+          ) : (
+            <span style={{ fontSize: '13px', color: '#71717a', fontStyle: 'italic' }}>No runs recorded</span>
+          )}
         </div>
 
         {activeRun && (
@@ -160,6 +164,19 @@ export const PipelineRunPage: React.FC<PipelineRunProps> = ({
           </div>
         )}
       </div>
+
+      {runs.length === 0 && (
+        <div style={{ padding: '60px 24px', textAlign: 'center', background: '#121215', borderRadius: '8px', border: '1px solid #27272a', margin: '20px 0' }}>
+          <Terminal size={36} style={{ opacity: 0.3, margin: '0 auto 16px' }} />
+          <h3 style={{ margin: '0 0 8px', fontSize: '15px', color: '#f4f4f5' }}>No Pipeline Executions Yet</h3>
+          <p style={{ color: '#71717a', fontSize: '13px', margin: '0 0 20px', maxWidth: '440px', marginLeft: 'auto', marginRight: 'auto' }}>
+            Trigger a workflow pipeline execution from Workflow Studio to stream real-time logs and build artifacts here.
+          </p>
+          <button type="button" className="btn-secondary" onClick={() => onNavigate('workflow-studio')}>
+            <span>Open Workflow Studio</span>
+          </button>
+        </div>
+      )}
 
       {/* Stage Progress Ribbon */}
       {activeRun && (

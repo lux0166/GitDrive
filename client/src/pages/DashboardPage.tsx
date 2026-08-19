@@ -137,35 +137,49 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
             </div>
 
             <div className={styles.repoList}>
-              {repos.map((repo) => (
-                <div
-                  key={repo.id}
-                  className={styles.repoRow}
-                  onClick={() => onNavigate('repositories', repo.id)}
-                >
-                  <div className={styles.repoDetails}>
-                    <div className={styles.repoNameRow}>
-                      <span className={styles.repoName}>{repo.name}</span>
-                      <span className="status-pill neutral">{repo.language}</span>
+              {repos.length === 0 ? (
+                <div style={{ padding: '24px', textAlign: 'center', color: '#71717a', fontSize: '13px' }}>
+                  <p style={{ margin: '0 0 12px', color: '#a1a1aa' }}>No repositories hosted yet.</p>
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    onClick={() => onNavigate('repositories')}
+                  >
+                    <FolderGit2 size={13} />
+                    <span>Create First Repository</span>
+                  </button>
+                </div>
+              ) : (
+                repos.map((repo) => (
+                  <div
+                    key={repo.id}
+                    className={styles.repoRow}
+                    onClick={() => onNavigate('repositories', repo.id)}
+                  >
+                    <div className={styles.repoDetails}>
+                      <div className={styles.repoNameRow}>
+                        <span className={styles.repoName}>{repo.name}</span>
+                        <span className="status-pill neutral">{repo.language}</span>
+                      </div>
+                    </div>
+
+                    <div className={styles.repoActions}>
+                      <button
+                        type="button"
+                        className="btn-secondary"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onNavigate('workflow-studio', repo.id);
+                        }}
+                        title="Inspect AST and workflow"
+                      >
+                        <Cpu size={13} />
+                        <span>Inspect DAG</span>
+                      </button>
                     </div>
                   </div>
-
-                  <div className={styles.repoActions}>
-                    <button
-                      type="button"
-                      className="btn-secondary"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onNavigate('workflow-studio', repo.id);
-                      }}
-                      title="Inspect AST and workflow"
-                    >
-                      <Cpu size={13} />
-                      <span>Inspect DAG</span>
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
 
@@ -187,26 +201,32 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
             </div>
 
             <div className={styles.runsTable}>
-              {runs.slice(0, 4).map((run) => (
-                <div
-                  key={run.id}
-                  className={styles.runTableRow}
-                  onClick={() => onNavigate('pipeline-runs', run.id)}
-                >
-                  <div className={styles.runStatusCol}>
-                    <div className="status-pill neutral">{run.status}</div>
-                    <span className={styles.runRepoName}>{run.repoName}</span>
-                  </div>
-
-                  <div className={styles.runMetaCol}>
-                    <code className={styles.runSha}>{run.commitSha.substring(0, 7)}</code>
-                    <span className={styles.runDuration}>
-                      <Clock size={11} />
-                      <span>{run.duration ? `${run.duration}s` : 'running'}</span>
-                    </span>
-                  </div>
+              {runs.length === 0 ? (
+                <div style={{ padding: '24px', textAlign: 'center', color: '#71717a', fontSize: '13px' }}>
+                  No pipeline executions recorded yet. Builds triggered on local repos will stream here.
                 </div>
-              ))}
+              ) : (
+                runs.slice(0, 4).map((run) => (
+                  <div
+                    key={run.id}
+                    className={styles.runTableRow}
+                    onClick={() => onNavigate('pipeline-runs', run.id)}
+                  >
+                    <div className={styles.runStatusCol}>
+                      <div className="status-pill neutral">{run.status}</div>
+                      <span className={styles.runRepoName}>{run.repoName}</span>
+                    </div>
+
+                    <div className={styles.runMetaCol}>
+                      <code className={styles.runSha}>{run.commitSha.substring(0, 7)}</code>
+                      <span className={styles.runDuration}>
+                        <Clock size={11} />
+                        <span>{run.duration ? `${run.duration}s` : 'running'}</span>
+                      </span>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -251,21 +271,27 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
             </div>
 
             <div className={styles.catalogMiniList}>
-              {releases.slice(0, 3).map((rel) => (
-                <div key={rel.id} className={styles.catalogMiniCard}>
-                  <div className={styles.miniCardInfo}>
-                    <span className={styles.miniAppName}>{rel.title || rel.repoName}</span>
-                    <code className={styles.miniTag}>{rel.tagName}</code>
-                  </div>
-                  <button
-                    type="button"
-                    className="btn-secondary"
-                    onClick={() => onNavigate('app-catalog')}
-                  >
-                    <span>Install</span>
-                  </button>
+              {releases.length === 0 ? (
+                <div style={{ padding: '20px', textAlign: 'center', color: '#71717a', fontSize: '13px' }}>
+                  No published LAN packages yet. Successful pipeline runs will automatically register releases here.
                 </div>
-              ))}
+              ) : (
+                releases.slice(0, 3).map((rel) => (
+                  <div key={rel.id} className={styles.catalogMiniCard}>
+                    <div className={styles.miniCardInfo}>
+                      <span className={styles.miniAppName}>{rel.title || rel.repoName}</span>
+                      <code className={styles.miniTag}>{rel.tagName}</code>
+                    </div>
+                    <button
+                      type="button"
+                      className="btn-secondary"
+                      onClick={() => onNavigate('app-catalog')}
+                    >
+                      <span>Install</span>
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
