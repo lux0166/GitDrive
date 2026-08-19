@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "GitDrive — Local-First Software Delivery Platform",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "concurrently \"npm run dev --workspace=server\" \"npm run dev --workspace=client\"",
     "dev:server": "npm run dev --workspace=server",
@@ -12,13 +13,54 @@
     "build": "npm run build:embed && npm run build --workspace=server",
     "build:bundle": "npx -y esbuild server/dist/index.js --bundle --platform=node --target=node20 --outfile=dist/server-bundle.cjs",
     "build:exe": "npm run build && npm run build:bundle && node --experimental-sea-config sea-config.json && node -e \"require('fs').copyFileSync(process.execPath, 'dist/gitdrive.exe')\" && npx -y postject dist/gitdrive.exe NODE_SEA_BLOB dist/sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2",
+    "electron:dev": "concurrently \"npm run dev:server\" \"npm run dev:client\" \"wait-on http://localhost:4000/api/health && electron .\"",
+    "electron:build": "npm run build && npm run build:bundle && electron-builder --win",
     "test": "npm run test --workspace=server"
+  },
+  "build": {
+    "appId": "com.lux0166.gitdrive",
+    "productName": "GitDrive",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "electron/**/*",
+      "server/dist/**/*",
+      "client/dist/**/*",
+      "dist/server-bundle.cjs",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "dist/server-bundle.cjs",
+        "to": "dist/server-bundle.cjs"
+      },
+      {
+        "from": "client/dist",
+        "to": "client/dist"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "GitDrive"
+    }
   },
   "workspaces": [
     "server",
     "client"
   ],
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "electron": "^43.4.1",
+    "electron-builder": "^26.15.3"
   }
 }
