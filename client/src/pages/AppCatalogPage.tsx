@@ -107,6 +107,7 @@ export const AppCatalogPage: React.FC<AppCatalogProps> = ({ onNavigate }) => {
           const mainArtifact = rel.artifacts[0];
           return (
             <div key={rel.id} className={styles.packageCard}>
+              {/* Top Half: Icon, Name, Version, Platform Pill */}
               <div className={styles.packageTopHalf}>
                 <div className={styles.cardHeaderRow}>
                   <div className={styles.pkgIconBox}>
@@ -120,33 +121,39 @@ export const AppCatalogPage: React.FC<AppCatalogProps> = ({ onNavigate }) => {
                 </div>
               </div>
 
+              {/* Bottom Panel: Clean 2-Tier Non-Wrapping Metadata */}
               <div className={styles.packageBottomPanel}>
-                <div className={styles.metaRow}>
-                  <div className={styles.fileDetails}>
-                    <code className={styles.fileName}>{mainArtifact?.fileName}</code>
-                    <span className={styles.fileSize}>
-                      {mainArtifact ? `${(mainArtifact.sizeBytes / (1024 * 1024)).toFixed(1)} MB` : ''}
-                    </span>
-                  </div>
+                {/* Tier 1: File Name & Non-Wrapping File Size */}
+                <div className={styles.fileSpecsRow}>
+                  <code className={styles.fileName}>{mainArtifact?.fileName}</code>
+                  <span className={styles.dotDivider}>•</span>
+                  <span className={styles.fileSize}>
+                    {mainArtifact ? `${(mainArtifact.sizeBytes / (1024 * 1024)).toFixed(1)} MB` : ''}
+                  </span>
+                </div>
 
-                  <div className={styles.shaContainer}>
+                {/* Tier 2: SHA-256 Provenance & Copy */}
+                <div className={styles.shaRow}>
+                  <div className={styles.shaGroup}>
                     <span className={styles.shaLabel}>SHA-256:</span>
                     <code className={styles.shaCode}>
                       {mainArtifact?.sha256.substring(0, 14)}...
                     </code>
-                    {mainArtifact && (
-                      <button
-                        type="button"
-                        className="btn-ghost"
-                        onClick={() => handleCopySha(mainArtifact.sha256)}
-                        title="Copy Checksum"
-                      >
-                        {copiedSha === mainArtifact.sha256 ? <Check size={12} /> : <Copy size={12} />}
-                      </button>
-                    )}
                   </div>
+                  {mainArtifact && (
+                    <button
+                      type="button"
+                      className="btn-ghost"
+                      onClick={() => handleCopySha(mainArtifact.sha256)}
+                      title="Copy Checksum"
+                      aria-label="Copy SHA-256 checksum"
+                    >
+                      {copiedSha === mainArtifact.sha256 ? <Check size={12} /> : <Copy size={12} />}
+                    </button>
+                  )}
                 </div>
 
+                {/* Actions: Commit Link & 1-Click Install */}
                 <div className={styles.actionRow}>
                   <button
                     type="button"
