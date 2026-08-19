@@ -164,14 +164,14 @@ export const RepoDetailPage: React.FC<RepoDetailProps> = ({
                 ))}
               </select>
               <span className="status-pill neutral">{repo?.language || 'TypeScript'}</span>
-              <span className="status-pill info">{repo?.isPrivate ? 'Private LAN' : 'Public LAN'}</span>
+              <span className="status-pill neutral">{repo?.isPrivate ? 'Private LAN' : 'Public LAN'}</span>
             </div>
             <p className={styles.repoDesc}>{repo?.description}</p>
           </div>
 
           <div className={styles.headerActions}>
             <button type="button" className="btn-secondary" onClick={handleCopyCloneUrl}>
-              {copiedClone ? <Check size={13} color="#22C55E" /> : <Copy size={13} />}
+              {copiedClone ? <Check size={13} /> : <Copy size={13} />}
               <span>{copiedClone ? 'Clone URL Copied' : 'Clone URL'}</span>
             </button>
             <button
@@ -238,9 +238,9 @@ export const RepoDetailPage: React.FC<RepoDetailProps> = ({
                     onClick={() => setSelectedFile(file.path)}
                   >
                     {file.type === 'dir' ? (
-                      <Folder size={13} color="var(--color-primary)" />
+                      <Folder size={13} />
                     ) : (
-                      <File size={13} color="var(--color-text-muted)" />
+                      <File size={13} />
                     )}
                     <span className={styles.fileNameText}>{file.name}</span>
                     {file.size && (
@@ -258,14 +258,14 @@ export const RepoDetailPage: React.FC<RepoDetailProps> = ({
           <div className={styles.fileViewerCard}>
             <div className={styles.viewerHeader}>
               <div className={styles.viewerTitleGroup}>
-                <FileCode size={14} color="var(--color-primary)" />
+                <FileCode size={14} />
                 <code className={styles.viewerPath}>{selectedFile}</code>
                 <span className={styles.viewerLinesCount}>
                   {codeLines.length} lines • {(fileBlob?.size || 0) / 1024 > 1 ? `${((fileBlob?.size || 0) / 1024).toFixed(1)} KB` : `${fileBlob?.size || 0} B`}
                 </span>
               </div>
               <button type="button" className="btn-secondary" onClick={handleCopyBlob}>
-                {copiedBlob ? <Check size={12} color="#22C55E" /> : <Copy size={12} />}
+                {copiedBlob ? <Check size={12} /> : <Copy size={12} />}
                 <span>{copiedBlob ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
@@ -335,12 +335,12 @@ export const RepoDetailPage: React.FC<RepoDetailProps> = ({
             <div key={diff.newPath} className={styles.diffFileCard}>
               <div className={styles.diffFileHeader}>
                 <div className={styles.diffPathWrap}>
-                  <span className="status-pill warning">{diff.status}</span>
+                  <span className="status-pill neutral">{diff.status}</span>
                   <code className={styles.diffPath}>{diff.newPath}</code>
                 </div>
                 <div className={styles.diffCounts}>
-                  <span className={styles.diffAddCount}>+{diff.additions}</span>
-                  <span className={styles.diffDelCount}>-{diff.deletions}</span>
+                  <span>+{diff.additions}</span>
+                  <span>-{diff.deletions}</span>
                 </div>
               </div>
 

@@ -141,11 +141,7 @@ export const AppCatalogPage: React.FC<AppCatalogProps> = ({ onNavigate }) => {
                         onClick={() => handleCopySha(mainArtifact.sha256)}
                         title="Copy Checksum"
                       >
-                        {copiedSha === mainArtifact.sha256 ? (
-                          <Check size={12} color="#22C55E" />
-                        ) : (
-                          <Copy size={12} />
-                        )}
+                        {copiedSha === mainArtifact.sha256 ? <Check size={12} /> : <Copy size={12} />}
                       </button>
                     )}
                   </div>

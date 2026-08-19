@@ -166,7 +166,7 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
             onClick={handleSaveWorkflow}
             disabled={isSaving}
           >
-            {saveSuccess ? <Check size={14} color="#22C55E" /> : <Save size={14} />}
+            {saveSuccess ? <Check size={14} /> : <Save size={14} />}
             <span>{saveSuccess ? 'Saved' : 'Save Workflow'}</span>
           </button>
 
@@ -187,7 +187,7 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
         <div className={styles.evidenceCard}>
           <div className={styles.evidenceHeader}>
             <div className={styles.evidenceTitleWrap}>
-              <Cpu size={15} color="var(--color-primary)" />
+              <Cpu size={15} />
               <h2 className={styles.evidenceTitle}>Inferred Toolchain & Target</h2>
             </div>
             <span className="status-pill neutral">
@@ -246,7 +246,7 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
                     </div>
 
                     <div className={styles.nodeCmdPreview}>
-                      <Terminal size={12} color="var(--color-primary)" />
+                      <Terminal size={12} />
                       <code>{node.command}</code>
                     </div>
 
@@ -306,7 +306,7 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
               <div className={styles.formGroup}>
                 <div className={styles.formLabelRow}>
                   <label className={styles.formLabel}>Execution Command</label>
-                  <Terminal size={12} color="var(--color-text-muted)" />
+                  <Terminal size={12} />
                 </div>
                 <textarea
                   className={styles.formTextarea}
@@ -321,7 +321,7 @@ export const WorkflowStudioPage: React.FC<WorkflowStudioProps> = ({
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Manifest Grounding</label>
                   <div className={styles.citationBox}>
-                    <FileCode size={12} color="var(--color-primary)" />
+                    <FileCode size={12} />
                     <span className={styles.citationBoxText}>{selectedNode.evidenceCitation}</span>
                   </div>
                 </div>

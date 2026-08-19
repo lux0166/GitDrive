@@ -73,7 +73,7 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Clean Single-Tier Metric Cards Grid */}
+      {/* Strict Monochrome Metric Cards Grid */}
       <div className={styles.metricsGrid}>
         {/* Metric 1: Hosted Repos */}
         <div className={styles.metricCard}>
@@ -88,7 +88,7 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
 
         {/* Metric 2: Successful Deliveries */}
         <div className={styles.metricCard}>
-          <div className={styles.metricIconBoxSuccess}>
+          <div className={styles.metricIconBox}>
             <CheckCircle2 size={18} />
           </div>
           <div className={styles.metricInfo}>
@@ -101,7 +101,7 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
 
         {/* Metric 3: LAN Packages */}
         <div className={styles.metricCard}>
-          <div className={styles.metricIconBoxAccent}>
+          <div className={styles.metricIconBox}>
             <Package size={18} />
           </div>
           <div className={styles.metricInfo}>
@@ -113,13 +113,13 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
 
       {/* Main Content Layout: 2-Column Responsive Grid */}
       <div className={styles.mainGrid}>
-        {/* Left Column (2-Span): Repositories & Execution Table */}
+        {/* Left Column: Repositories & Execution Table */}
         <div className={styles.leftCol}>
           {/* Active Repositories */}
           <div className={styles.sectionCard}>
             <div className={styles.sectionHeader}>
               <div className={styles.sectionTitleWrap}>
-                <HardDrive size={15} color="var(--color-text-muted)" />
+                <HardDrive size={15} />
                 <h2>Hosted Git Repositories</h2>
               </div>
               <button
@@ -169,7 +169,7 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
           <div className={styles.sectionCard}>
             <div className={styles.sectionHeader}>
               <div className={styles.sectionTitleWrap}>
-                <Activity size={15} color="var(--color-text-muted)" />
+                <Activity size={15} />
                 <h2>Recent Pipeline Runs</h2>
               </div>
               <button
@@ -190,19 +190,7 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
                   onClick={() => onNavigate('pipeline-runs', run.id)}
                 >
                   <div className={styles.runStatusCol}>
-                    <div
-                      className={`status-pill ${
-                        run.status === 'passed'
-                          ? 'success'
-                          : run.status === 'running'
-                          ? 'info'
-                          : run.status === 'failed'
-                          ? 'danger'
-                          : 'neutral'
-                      }`}
-                    >
-                      {run.status}
-                    </div>
+                    <div className="status-pill neutral">{run.status}</div>
                     <span className={styles.runRepoName}>{run.repoName}</span>
                   </div>
 
@@ -225,7 +213,7 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
           <div className={styles.sectionCard}>
             <div className={styles.sectionHeader}>
               <div className={styles.sectionTitleWrap}>
-                <ShieldCheck size={15} color="#22C55E" />
+                <ShieldCheck size={15} />
                 <h2>LAN Security & Fleet</h2>
               </div>
             </div>
@@ -234,12 +222,12 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
               <div className={styles.fleetItem}>
                 <Server size={13} />
                 <span>runner-lan-01 (Daemon)</span>
-                <span className="status-pill success">Ready</span>
+                <span className="status-pill neutral">Ready</span>
               </div>
               <div className={styles.fleetItem}>
                 <Terminal size={13} />
                 <span>runner-sandbox-02</span>
-                <span className="status-pill success">Ready</span>
+                <span className="status-pill neutral">Ready</span>
               </div>
             </div>
           </div>
@@ -248,7 +236,7 @@ export const DashboardPage: React.FC<DashboardProps> = ({ onNavigate }) => {
           <div className={styles.sectionCard}>
             <div className={styles.sectionHeader}>
               <div className={styles.sectionTitleWrap}>
-                <Package size={15} color="var(--color-primary)" />
+                <Package size={15} />
                 <h2>LAN App Catalog</h2>
               </div>
               <button
