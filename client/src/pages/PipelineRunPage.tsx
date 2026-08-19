@@ -139,17 +139,7 @@ export const PipelineRunPage: React.FC<PipelineRunProps> = ({
 
         {activeRun && (
           <div className={styles.runMetaPills}>
-            <div
-              className={`status-pill ${
-                activeRun.status === 'passed'
-                  ? 'success'
-                  : activeRun.status === 'running'
-                  ? 'info'
-                  : activeRun.status === 'failed'
-                  ? 'danger'
-                  : 'neutral'
-              }`}
-            >
+            <div className="status-pill neutral">
               {activeRun.status === 'passed' && <CheckCircle2 size={12} />}
               {activeRun.status === 'failed' && <XCircle size={12} />}
               {activeRun.status === 'running' && <RotateCw size={12} className={styles.spin} />}
@@ -188,13 +178,13 @@ export const PipelineRunPage: React.FC<PipelineRunProps> = ({
                   }`}
                 >
                   <div className={styles.stageHeader}>
-                    <span className={styles.stageNumber}>0{i + 1}</span>
+                    <span className={styles.stageNumber}>{i + 1 < 10 ? `0${i + 1}` : i + 1}</span>
                     {isPassed ? (
-                      <CheckCircle2 size={13} color="#22C55E" />
+                      <CheckCircle2 size={13} />
                     ) : isRunning ? (
-                      <RotateCw size={13} color="#38BDF8" className={styles.spin} />
+                      <RotateCw size={13} className={styles.spin} />
                     ) : (
-                      <Clock size={13} color="var(--color-text-muted)" />
+                      <Clock size={13} />
                     )}
                   </div>
                   <div className={styles.stageName}>{node.name}</div>
@@ -212,9 +202,9 @@ export const PipelineRunPage: React.FC<PipelineRunProps> = ({
       <div className={styles.terminalContainer}>
         <div className={styles.terminalHeader}>
           <div className={styles.terminalTitleWrap}>
-            <Terminal size={14} color="var(--color-primary)" />
+            <Terminal size={14} color="#FFFFFF" />
             <span className={styles.terminalTitle}>Runner Log Stream</span>
-            <div className="status-pill info">
+            <div className="status-pill neutral">
               <ShieldCheck size={11} />
               <span>Sandbox Attached</span>
             </div>
@@ -243,7 +233,7 @@ export const PipelineRunPage: React.FC<PipelineRunProps> = ({
             </button>
 
             <button type="button" className="btn-secondary" onClick={handleCopyLogs}>
-              {copiedLog ? <Check size={12} color="#22C55E" /> : <Copy size={12} />}
+              {copiedLog ? <Check size={12} /> : <Copy size={12} />}
               <span>{copiedLog ? 'Copied' : 'Copy'}</span>
             </button>
           </div>
@@ -278,7 +268,7 @@ export const PipelineRunPage: React.FC<PipelineRunProps> = ({
         <div className={styles.artifactsBox}>
           <div className={styles.artifactsHeader}>
             <div className={styles.artifactsTitleWrap}>
-              <Package size={16} color="var(--color-primary)" />
+              <Package size={16} />
               <h2 className={styles.artifactsTitle}>Produced Release Artifacts</h2>
             </div>
             <button
@@ -312,7 +302,7 @@ export const PipelineRunPage: React.FC<PipelineRunProps> = ({
                       onClick={() => handleCopySha(art.sha256)}
                       title="Copy Checksum"
                     >
-                      {copiedHash === art.sha256 ? <Check size={12} color="#22C55E" /> : <Copy size={12} />}
+                      {copiedHash === art.sha256 ? <Check size={12} /> : <Copy size={12} />}
                     </button>
                   </div>
                 </div>
