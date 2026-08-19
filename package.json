@@ -1,6 +1,6 @@
 {
   "name": "gitdrive",
-  "version": "0.1.0",
+  "version": "0.2.3",
   "private": true,
   "description": "GitDrive — Local-First Software Delivery Platform",
   "main": "electron/main.cjs",
