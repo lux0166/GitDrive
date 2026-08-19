@@ -74,6 +74,9 @@ graph TD
 
 ---
 
+## 📖 Documentation & User Guide
+- 👉 **[Complete User & Operator Guide (HOW_TO_USE.md)](HOW_TO_USE.md)** — Step-by-step workflow guide, REST API reference, and operational manual.
+
 ## 🚀 Quickstart & Development
 
 ### Prerequisites
